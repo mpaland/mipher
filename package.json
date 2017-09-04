@@ -1,0 +1,21 @@
+{
+  "name": "mipher",
+  "version": "0.0.0",
+  "author": "Marco Paland",
+  "license": "MIT",
+  "description": "Mobile Cipher crypto library in typescript",
+  "dependencies": {
+    "lite-server": "latest",
+    "typescript": "latest"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "pretest": "npm run build",
+    "test": "mocha ./js/test/spec/**/*_test.js",
+     "dev": "lite-server"
+  }
+}
