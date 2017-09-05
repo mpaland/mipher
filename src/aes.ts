@@ -28,9 +28,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Convert, Util, Blockcipher} from './base';
-import {CBC, CTR} from './blockmode';
-import {PKCS7} from './padding';
+import { Convert, Util, Blockcipher } from './base';
+import { CBC, CTR } from './blockmode';
+import { PKCS7 } from './padding';
 
 
 /**
@@ -59,6 +59,7 @@ export class AES implements Blockcipher {
   B2: Function;
   B3: Function;
   F1: Function;
+
 
   /**
    * AES ctor
@@ -508,6 +509,7 @@ export class AES implements Blockcipher {
     b[2] = this.F1(t2, t3, t0, t1) ^ ctx.rk[rounds][2];
     b[3] = this.F1(t3, t0, t1, t2) ^ ctx.rk[rounds][3];
 
+    // security clear
     t0 = t1 = t2 = t3 = 0;
 
     return this.unpackBytes(b);
@@ -553,6 +555,7 @@ export class AES implements Blockcipher {
     b[2] ^= ctx.rk[0][2];
     b[3] ^= ctx.rk[0][3];
 
+    // security clear
     t0 = t1 = t2 = t3 = 0;
 
     return this.unpackBytes(b);

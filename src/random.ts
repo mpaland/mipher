@@ -30,9 +30,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Convert, Util} from './base';
-import {AES} from './aes';
-import {SHA256} from './sha256';
+import { Convert, Util } from './base';
+import { AES } from './aes';
+import { SHA256 } from './sha256';
 
 
 /**
@@ -63,21 +63,21 @@ export class Random {
    */
   constructor(numPools: number = 32, entropy?: Uint8Array) {
     // constants
-    this.NUM_POOLS = numPools;              // number of pools used for entropy acquisition. Defaults to 32 pools, use 16 on limited entropy sources
+    this.NUM_POOLS    = numPools;           // number of pools used for entropy acquisition. Defaults to 32 pools, use 16 on limited entropy sources
     this.RESEED_LIMIT = 64;                 // reseed trigger level
     this.MILLISECONDS_PER_RESEED = 10000;   // reseed force after milliseconds
 
-    this.gen    = new AES();
-    this.genKey = new Uint8Array(32);
-    this.genCnt = new Uint8Array(16);
-    this.poolData = [];       // SHA objects
-    this.poolEntropy = [];    // entropy of the according pool
-    this.robin = { kbd: 0, mouse: 0, scroll: 0, touch: 0, motion: 0, time: 0, rnd: 0, dom: 0 };
-    this.entropy_level = 0;   // actual generator entropy
-    this.eventId = 0;
-    this.reseedCnt = 0;
-    this.lastReseed = 0;      // time of last reseed
-    this.active = false;      // genarator / collectors status
+    this.gen           = new AES();
+    this.genKey        = new Uint8Array(32);
+    this.genCnt        = new Uint8Array(16);
+    this.poolData      = [];      // SHA objects
+    this.poolEntropy   = [];      // entropy of the according pool
+    this.robin         = { kbd: 0, mouse: 0, scroll: 0, touch: 0, motion: 0, time: 0, rnd: 0, dom: 0 };
+    this.entropy_level = 0;       // actual generator entropy
+    this.eventId       = 0;
+    this.reseedCnt     = 0;
+    this.lastReseed    = 0;       // time of last reseed
+    this.active        = false;   // genarator / collectors status
 
     // create the data pools
     for (let i = 0; i < this.NUM_POOLS; i++) {

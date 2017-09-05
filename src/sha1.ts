@@ -25,10 +25,12 @@
 //
 // \brief SHA1 implementation
 //        Generates a 20 byte (160 bit) hash value
+//        CAUTION: SHA1 is meant to be broken, consider using a more secure hash
+//                 like SHA512 or better SHA3
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Convert, Util, Hash} from "./base";
+import { Convert, Util, Hash } from "./base";
 
 
 /**
@@ -169,12 +171,12 @@ export class SHA1 implements Hash {
     let c = this.count;
     b[56] = (c[1] >>> 24) & 0xff;
     b[57] = (c[1] >>> 16) & 0xff;
-    b[58] = (c[1] >>> 8) & 0xff;
-    b[59] = (c[1] >>> 0) & 0xff;
+    b[58] = (c[1] >>>  8) & 0xff;
+    b[59] = (c[1] >>>  0) & 0xff;
     b[60] = (c[0] >>> 24) & 0xff;
     b[61] = (c[0] >>> 16) & 0xff;
-    b[62] = (c[0] >>> 8) & 0xff;
-    b[63] = (c[0] >>> 0) & 0xff;
+    b[62] = (c[0] >>>  8) & 0xff;
+    b[63] = (c[0] >>>  0) & 0xff;
     this.transform();
 
     // return the hash as byte array (20 bytes)
@@ -182,8 +184,8 @@ export class SHA1 implements Hash {
     for (let i = 0; i < 5; i++) {
       hash[(i << 2) + 0] = (this.H[i] >>> 24) & 0xff;
       hash[(i << 2) + 1] = (this.H[i] >>> 16) & 0xff;
-      hash[(i << 2) + 2] = (this.H[i] >>> 8) & 0xff;
-      hash[(i << 2) + 3] = (this.H[i] >>> 0) & 0xff;
+      hash[(i << 2) + 2] = (this.H[i] >>>  8) & 0xff;
+      hash[(i << 2) + 3] = (this.H[i] >>>  0) & 0xff;
     }
 
     // clear internal states and prepare for new hash

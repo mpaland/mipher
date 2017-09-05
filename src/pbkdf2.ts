@@ -30,9 +30,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Convert, Util, KeyedHash} from './base';
-import {SHA256} from './sha256';
-import {HMAC} from './hmac';
+import { Convert, Util, KeyedHash } from './base';
+import { SHA256 } from './sha256';
+import { HMAC } from './hmac';
 
 
 /**

@@ -38,8 +38,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Convert, Util, Signature} from './base';
-import {SHA512} from './SHA512';
+import { Convert, Util, Signature } from './base';
+import { SHA512 } from './SHA512';
 
 
 /**
@@ -54,18 +54,19 @@ export class Curve25519 {
   _9:  Uint8Array;
   _121665: Float64Array;
 
+
   /**
    * Curve25519 ctor
    */
   constructor() {
     this.gf0 = this.gf();
     this.gf1 = this.gf([1]);
-    this._9 = new Uint8Array(32);
+    this._9  = new Uint8Array(32);
     this._9[0] = 9;
     this._121665 = this.gf([0xdb41, 1]);
-    this.D = this.gf([0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab, 0x4141, 0x0a4d, 0x0070, 0xe898, 0x7779, 0x4079, 0x8cc7, 0xfe73, 0x2b6f, 0x6cee, 0x5203]);
+    this.D  = this.gf([0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab, 0x4141, 0x0a4d, 0x0070, 0xe898, 0x7779, 0x4079, 0x8cc7, 0xfe73, 0x2b6f, 0x6cee, 0x5203]);
     this.D2 = this.gf([0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0, 0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406]);
-    this.I = this.gf([0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478, 0xad2f, 0x1806, 0x2f43, 0xd7a7, 0x3dfb, 0x0099, 0x2b4d, 0xdf0b, 0x4fc1, 0x2480, 0x2b83]);
+    this.I  = this.gf([0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478, 0xad2f, 0x1806, 0x2f43, 0xd7a7, 0x3dfb, 0x0099, 0x2b4d, 0xdf0b, 0x4fc1, 0x2480, 0x2b83]);
   }
 
 
@@ -105,20 +106,20 @@ export class Curve25519 {
 
   M(o: Float64Array, a: Float64Array, b: Float64Array) {
     let v, c,
-      t0 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0,
-      t8 = 0, t9 = 0, t10 = 0, t11 = 0, t12 = 0, t13 = 0, t14 = 0, t15 = 0,
+      t0  = 0, t1  = 0, t2  = 0, t3  = 0, t4  = 0, t5  = 0, t6  = 0, t7  = 0,
+      t8  = 0, t9  = 0, t10 = 0, t11 = 0, t12 = 0, t13 = 0, t14 = 0, t15 = 0,
       t16 = 0, t17 = 0, t18 = 0, t19 = 0, t20 = 0, t21 = 0, t22 = 0, t23 = 0,
       t24 = 0, t25 = 0, t26 = 0, t27 = 0, t28 = 0, t29 = 0, t30 = 0,
-      b0 = b[0],
-      b1 = b[1],
-      b2 = b[2],
-      b3 = b[3],
-      b4 = b[4],
-      b5 = b[5],
-      b6 = b[6],
-      b7 = b[7],
-      b8 = b[8],
-      b9 = b[9],
+      b0  = b[0],
+      b1  = b[1],
+      b2  = b[2],
+      b3  = b[3],
+      b4  = b[4],
+      b5  = b[5],
+      b6  = b[6],
+      b7  = b[7],
+      b8  = b[8],
+      b9  = b[9],
       b10 = b[10],
       b11 = b[11],
       b12 = b[12],
@@ -127,16 +128,16 @@ export class Curve25519 {
       b15 = b[15];
 
     v = a[0];
-    t0 += v * b0;
-    t1 += v * b1;
-    t2 += v * b2;
-    t3 += v * b3;
-    t4 += v * b4;
-    t5 += v * b5;
-    t6 += v * b6;
-    t7 += v * b7;
-    t8 += v * b8;
-    t9 += v * b9;
+    t0  += v * b0;
+    t1  += v * b1;
+    t2  += v * b2;
+    t3  += v * b3;
+    t4  += v * b4;
+    t5  += v * b5;
+    t6  += v * b6;
+    t7  += v * b7;
+    t8  += v * b8;
+    t9  += v * b9;
     t10 += v * b10;
     t11 += v * b11;
     t12 += v * b12;
@@ -144,15 +145,15 @@ export class Curve25519 {
     t14 += v * b14;
     t15 += v * b15;
     v = a[1];
-    t1 += v * b0;
-    t2 += v * b1;
-    t3 += v * b2;
-    t4 += v * b3;
-    t5 += v * b4;
-    t6 += v * b5;
-    t7 += v * b6;
-    t8 += v * b7;
-    t9 += v * b8;
+    t1  += v * b0;
+    t2  += v * b1;
+    t3  += v * b2;
+    t4  += v * b3;
+    t5  += v * b4;
+    t6  += v * b5;
+    t7  += v * b6;
+    t8  += v * b7;
+    t9  += v * b8;
     t10 += v * b9;
     t11 += v * b10;
     t12 += v * b11;
@@ -161,14 +162,14 @@ export class Curve25519 {
     t15 += v * b14;
     t16 += v * b15;
     v = a[2];
-    t2 += v * b0;
-    t3 += v * b1;
-    t4 += v * b2;
-    t5 += v * b3;
-    t6 += v * b4;
-    t7 += v * b5;
-    t8 += v * b6;
-    t9 += v * b7;
+    t2  += v * b0;
+    t3  += v * b1;
+    t4  += v * b2;
+    t5  += v * b3;
+    t6  += v * b4;
+    t7  += v * b5;
+    t8  += v * b6;
+    t9  += v * b7;
     t10 += v * b8;
     t11 += v * b9;
     t12 += v * b10;
@@ -178,13 +179,13 @@ export class Curve25519 {
     t16 += v * b14;
     t17 += v * b15;
     v = a[3];
-    t3 += v * b0;
-    t4 += v * b1;
-    t5 += v * b2;
-    t6 += v * b3;
-    t7 += v * b4;
-    t8 += v * b5;
-    t9 += v * b6;
+    t3  += v * b0;
+    t4  += v * b1;
+    t5  += v * b2;
+    t6  += v * b3;
+    t7  += v * b4;
+    t8  += v * b5;
+    t9  += v * b6;
     t10 += v * b7;
     t11 += v * b8;
     t12 += v * b9;
@@ -195,12 +196,12 @@ export class Curve25519 {
     t17 += v * b14;
     t18 += v * b15;
     v = a[4];
-    t4 += v * b0;
-    t5 += v * b1;
-    t6 += v * b2;
-    t7 += v * b3;
-    t8 += v * b4;
-    t9 += v * b5;
+    t4  += v * b0;
+    t5  += v * b1;
+    t6  += v * b2;
+    t7  += v * b3;
+    t8  += v * b4;
+    t9  += v * b5;
     t10 += v * b6;
     t11 += v * b7;
     t12 += v * b8;
@@ -212,11 +213,11 @@ export class Curve25519 {
     t18 += v * b14;
     t19 += v * b15;
     v = a[5];
-    t5 += v * b0;
-    t6 += v * b1;
-    t7 += v * b2;
-    t8 += v * b3;
-    t9 += v * b4;
+    t5  += v * b0;
+    t6  += v * b1;
+    t7  += v * b2;
+    t8  += v * b3;
+    t9  += v * b4;
     t10 += v * b5;
     t11 += v * b6;
     t12 += v * b7;
@@ -229,10 +230,10 @@ export class Curve25519 {
     t19 += v * b14;
     t20 += v * b15;
     v = a[6];
-    t6 += v * b0;
-    t7 += v * b1;
-    t8 += v * b2;
-    t9 += v * b3;
+    t6  += v * b0;
+    t7  += v * b1;
+    t8  += v * b2;
+    t9  += v * b3;
     t10 += v * b4;
     t11 += v * b5;
     t12 += v * b6;
@@ -246,9 +247,9 @@ export class Curve25519 {
     t20 += v * b14;
     t21 += v * b15;
     v = a[7];
-    t7 += v * b0;
-    t8 += v * b1;
-    t9 += v * b2;
+    t7  += v * b0;
+    t8  += v * b1;
+    t9  += v * b2;
     t10 += v * b3;
     t11 += v * b4;
     t12 += v * b5;
@@ -263,8 +264,8 @@ export class Curve25519 {
     t21 += v * b14;
     t22 += v * b15;
     v = a[8];
-    t8 += v * b0;
-    t9 += v * b1;
+    t8  += v * b0;
+    t9  += v * b1;
     t10 += v * b2;
     t11 += v * b3;
     t12 += v * b4;
@@ -280,7 +281,7 @@ export class Curve25519 {
     t22 += v * b14;
     t23 += v * b15;
     v = a[9];
-    t9 += v * b0;
+    t9  += v * b0;
     t10 += v * b1;
     t11 += v * b2;
     t12 += v * b3;
@@ -399,16 +400,16 @@ export class Curve25519 {
     t29 += v * b14;
     t30 += v * b15;
 
-    t0 += 38 * t16;
-    t1 += 38 * t17;
-    t2 += 38 * t18;
-    t3 += 38 * t19;
-    t4 += 38 * t20;
-    t5 += 38 * t21;
-    t6 += 38 * t22;
-    t7 += 38 * t23;
-    t8 += 38 * t24;
-    t9 += 38 * t25;
+    t0  += 38 * t16;
+    t1  += 38 * t17;
+    t2  += 38 * t18;
+    t3  += 38 * t19;
+    t4  += 38 * t20;
+    t5  += 38 * t21;
+    t6  += 38 * t22;
+    t7  += 38 * t23;
+    t8  += 38 * t24;
+    t9  += 38 * t25;
     t10 += 38 * t26;
     t11 += 38 * t27;
     t12 += 38 * t28;
@@ -648,8 +649,7 @@ export class Curve25519 {
 
     this.S(chk, r[0]);
     this.M(chk, chk, den);
-    if (this.neq25519(chk, num))
-      return -1;
+    if (this.neq25519(chk, num)) return -1;
 
     if (this.par25519(r[0]) === (p[31] >>> 7)) this.Z(r[0], this.gf0, r[0]);
 

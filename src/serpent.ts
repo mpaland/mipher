@@ -33,9 +33,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Convert, Util, Blockcipher, Streamcipher} from './base';
-import {CBC, CTR} from './blockmode';
-import {PKCS7} from './padding';
+import { Convert, Util, Blockcipher, Streamcipher } from './base';
+import { CBC, CTR } from './blockmode';
+import { PKCS7 } from './padding';
 
 
 /**
@@ -102,7 +102,7 @@ export class Serpent implements Blockcipher {
         r[x2] &= r[x0]; r[x2] ^= r[x1]; r[x1] |= r[x0]; r[x0] = ~r[x0]; r[x0] ^= r[x2]; r[x4] ^= r[x1];
       },
       function (r, x0: number, x1: number, x2: number, x3: number, x4: number) {
-        r[x3] = ~r[x3]; r[x1] ^= r[x0]; r[x4] = r[x0]; r[x0] &= r[x2]; r[x0] ^= r[x3]; r[x3] |= r[x4];
+        r[x3] = ~r[x3]; r[x1] ^= r[x0]; r[x4]  = r[x0]; r[x0] &= r[x2]; r[x0] ^= r[x3]; r[x3] |= r[x4];
         r[x2] ^= r[x1]; r[x3] ^= r[x1]; r[x1] &= r[x0]; r[x0] ^= r[x2]; r[x2] &= r[x3]; r[x3] |= r[x1];
         r[x0] = ~r[x0]; r[x3] ^= r[x0]; r[x4] ^= r[x0]; r[x0] ^= r[x2]; r[x1] |= r[x2];
       },
@@ -123,11 +123,11 @@ export class Serpent implements Blockcipher {
       },
       function (r, x0: number, x1: number, x2: number, x3: number, x4: number) {
         r[x4]  = r[x1]; r[x3] ^= r[x0]; r[x1] ^= r[x2]; r[x2] ^= r[x0]; r[x0] &= r[x3]; r[x1] |= r[x3];
-        r[x4]  = ~r[x4]; r[x0] ^= r[x1]; r[x1] ^= r[x2]; r[x3] ^= r[x4]; r[x4] ^= r[x0]; r[x2] &= r[x0];
+        r[x4] = ~r[x4]; r[x0] ^= r[x1]; r[x1] ^= r[x2]; r[x3] ^= r[x4]; r[x4] ^= r[x0]; r[x2] &= r[x0];
         r[x4] ^= r[x1]; r[x2] ^= r[x3]; r[x3] &= r[x1]; r[x3] ^= r[x0]; r[x1] ^= r[x2];
       },
       function (r, x0: number, x1: number, x2: number, x3: number, x4: number) {
-        r[x1] = ~r[x1]; r[x4] = r[x1]; r[x0] = ~r[x0]; r[x1] &= r[x2]; r[x1] ^= r[x3]; r[x3] |= r[x4]; r[x4] ^= r[x2];
+        r[x1] = ~r[x1]; r[x4]  = r[x1]; r[x0] = ~r[x0]; r[x1] &= r[x2]; r[x1] ^= r[x3]; r[x3] |= r[x4]; r[x4] ^= r[x2];
         r[x2] ^= r[x3]; r[x3] ^= r[x0]; r[x0] |= r[x1]; r[x2] &= r[x0]; r[x0] ^= r[x4]; r[x4] ^= r[x3];
         r[x3] &= r[x0]; r[x4] ^= r[x1]; r[x2] ^= r[x4]; r[x3] ^= r[x1]; r[x4] |= r[x0]; r[x4] ^= r[x1];
       }
@@ -140,22 +140,22 @@ export class Serpent implements Blockcipher {
         r[x1] ^= r[x3]; r[x3] &= r[x0]; r[x1] ^= r[x0]; r[x0] ^= r[x2]; r[x4] ^= r[x3];
       },
       function (r, x0: number, x1: number, x2: number, x3: number, x4: number) {
-        r[x1] ^= r[x3]; r[x4] = r[x0]; r[x0] ^= r[x2]; r[x2] = ~r[x2]; r[x4] |= r[x1]; r[x4] ^= r[x3];
+        r[x1] ^= r[x3]; r[x4]  = r[x0]; r[x0] ^= r[x2]; r[x2] = ~r[x2]; r[x4] |= r[x1]; r[x4] ^= r[x3];
         r[x3] &= r[x1]; r[x1] ^= r[x2]; r[x2] &= r[x4]; r[x4] ^= r[x1]; r[x1] |= r[x3]; r[x3] ^= r[x0];
         r[x2] ^= r[x0]; r[x0] |= r[x4]; r[x2] ^= r[x4]; r[x1] ^= r[x0]; r[x4] ^= r[x1];
       },
       function (r, x0: number, x1: number, x2: number, x3: number, x4: number) {
-        r[x2] ^= r[x1]; r[x4] = r[x3]; r[x3] = ~r[x3]; r[x3] |= r[x2]; r[x2] ^= r[x4]; r[x4] ^= r[x0];
+        r[x2] ^= r[x1]; r[x4]  = r[x3]; r[x3] = ~r[x3]; r[x3] |= r[x2]; r[x2] ^= r[x4]; r[x4] ^= r[x0];
         r[x3] ^= r[x1]; r[x1] |= r[x2]; r[x2] ^= r[x0]; r[x1] ^= r[x4]; r[x4] |= r[x3]; r[x2] ^= r[x3];
         r[x4] ^= r[x2]; r[x2] &= r[x1]; r[x2] ^= r[x3]; r[x3] ^= r[x4]; r[x4] ^= r[x0];
       },
       function (r, x0: number, x1: number, x2: number, x3: number, x4: number) {
-        r[x2] ^= r[x1]; r[x4] = r[x1]; r[x1] &= r[x2]; r[x1] ^= r[x0]; r[x0] |= r[x4]; r[x4] ^= r[x3];
+        r[x2] ^= r[x1]; r[x4]  = r[x1]; r[x1] &= r[x2]; r[x1] ^= r[x0]; r[x0] |= r[x4]; r[x4] ^= r[x3];
         r[x0] ^= r[x3]; r[x3] |= r[x1]; r[x1] ^= r[x2]; r[x1] ^= r[x3]; r[x0] ^= r[x2]; r[x2] ^= r[x3];
         r[x3] &= r[x1]; r[x1] ^= r[x0]; r[x0] &= r[x2]; r[x4] ^= r[x3]; r[x3] ^= r[x0]; r[x0] ^= r[x1];
       },
       function (r, x0: number, x1: number, x2: number, x3: number, x4: number) {
-        r[x2] ^= r[x3]; r[x4] = r[x0]; r[x0] &= r[x1]; r[x0] ^= r[x2]; r[x2] |= r[x3]; r[x4] = ~r[x4];
+        r[x2] ^= r[x3]; r[x4]  = r[x0]; r[x0] &= r[x1]; r[x0] ^= r[x2]; r[x2] |= r[x3]; r[x4] = ~r[x4];
         r[x1] ^= r[x0]; r[x0] ^= r[x2]; r[x2] &= r[x4]; r[x2] ^= r[x0]; r[x0] |= r[x4]; r[x0] ^= r[x3];
         r[x3] &= r[x2]; r[x4] ^= r[x3]; r[x3] ^= r[x1]; r[x1] &= r[x0]; r[x4] ^= r[x1]; r[x0] ^= r[x3];
       },
@@ -165,7 +165,7 @@ export class Serpent implements Blockcipher {
         r[x1] ^=  r[x3]; r[x0] &= r[x2]; r[x2] ^= r[x3]; r[x0] ^= r[x2]; r[x2] ^= r[x4]; r[x4] ^= r[x3];
       },
       function (r, x0: number, x1: number, x2: number, x3: number, x4: number) {
-        r[x0] ^= r[x2]; r[x4] = r[x0]; r[x0] &= r[x3]; r[x2] ^= r[x3]; r[x0] ^= r[x2]; r[x3] ^= r[x1];
+        r[x0] ^= r[x2]; r[x4]  = r[x0]; r[x0] &= r[x3]; r[x2] ^= r[x3]; r[x0] ^= r[x2]; r[x3] ^= r[x1];
         r[x2] |= r[x4]; r[x2] ^= r[x3]; r[x3] &= r[x0]; r[x0] = ~r[x0]; r[x3] ^= r[x1]; r[x1] &= r[x2];
         r[x4] ^= r[x0]; r[x3] ^= r[x4]; r[x4] ^= r[x2]; r[x0] ^= r[x1]; r[x2] ^= r[x0];
       },
@@ -227,10 +227,27 @@ export class Serpent implements Blockcipher {
 
 
   private LK(r: any, a: number, b: number, c: number, d: number, e: number, i: number) {
-    r[a]  = this.rotW(r[a], 13); r[c] = this.rotW(r[c], 3); r[b] ^= r[a]; r[e] = (r[a] << 3) & this.wMax;
-    r[d] ^= r[c]; r[b] ^= r[c]; r[b] = this.rotW(r[b], 1); r[d] ^= r[e]; r[d] = this.rotW(r[d], 7); r[e] = r[b];
-    r[a] ^= r[b]; r[e] = (r[e] << 7) & this.wMax; r[c] ^= r[d]; r[a] ^= r[d]; r[c] ^= r[e]; r[d] ^= this.key[4 * i + 3];
-    r[b] ^= this.key[4 * i + 1]; r[a] = this.rotW(r[a], 5); r[c] = this.rotW(r[c], 22); r[a] ^= this.key[4 * i + 0]; r[c] ^= this.key[4 * i + 2];
+    r[a]  = this.rotW(r[a], 13);
+    r[c]  = this.rotW(r[c], 3);
+    r[b] ^= r[a];
+    r[e]  = (r[a] << 3) & this.wMax;
+    r[d] ^= r[c];
+    r[b] ^= r[c];
+    r[b]  = this.rotW(r[b], 1);
+    r[d] ^= r[e];
+    r[d]  = this.rotW(r[d], 7);
+    r[e]  = r[b];
+    r[a] ^= r[b];
+    r[e]  = (r[e] << 7) & this.wMax;
+    r[c] ^= r[d];
+    r[a] ^= r[d];
+    r[c] ^= r[e];
+    r[d] ^= this.key[4 * i + 3];
+    r[b] ^= this.key[4 * i + 1];
+    r[a]  = this.rotW(r[a], 5);
+    r[c]  = this.rotW(r[c], 22);
+    r[a] ^= this.key[4 * i + 0];
+    r[c] ^= this.key[4 * i + 2];
   };
 
 

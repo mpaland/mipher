@@ -28,11 +28,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Convert, Util, Hash, KeyedHash} from "./base";
-import {ZeroPadding} from "./padding";
-import {SHA1} from "./sha1";
-import {SHA256} from "./sha256";
-import {SHA512} from "./sha512";
+import { Convert, Util, Hash, KeyedHash } from "./base";
+import { ZeroPadding } from "./padding";
+import { SHA1 } from "./sha1";
+import { SHA256 } from "./sha256";
+import { SHA512 } from "./sha512";
 
 
 /**
@@ -155,4 +155,3 @@ export class HMAC_SHA512 extends HMAC {
     super(new SHA512());
   }
 }
-

@@ -29,7 +29,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Streamcipher} from "./base";
+import { Streamcipher } from "./base";
 
 
 /**
@@ -100,8 +100,8 @@ export class ChaCha20 implements Streamcipher {
   private QUARTERROUND(x: any, a: number, b: number, c: number, d: number) {
     x[a] += x[b]; x[d] = this.ROTATE(x[d] ^ x[a], 16);
     x[c] += x[d]; x[b] = this.ROTATE(x[b] ^ x[c], 12);
-    x[a] += x[b]; x[d] = this.ROTATE(x[d] ^ x[a], 8);
-    x[c] += x[d]; x[b] = this.ROTATE(x[b] ^ x[c], 7);
+    x[a] += x[b]; x[d] = this.ROTATE(x[d] ^ x[a],  8);
+    x[c] += x[d]; x[b] = this.ROTATE(x[b] ^ x[c],  7);
   }
 
 

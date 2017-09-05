@@ -28,7 +28,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Convert, Util, Hash} from "./base";
+import { Convert, Util, Hash } from "./base";
 
 
 /**

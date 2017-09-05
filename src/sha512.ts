@@ -28,7 +28,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {Convert, Util, Hash} from "./base";
+import { Convert, Util, Hash } from "./base";
 
 
 /**
@@ -93,9 +93,9 @@ export class SHA512 implements Hash {
    */
   private transform() {
     let h = this.H,
-      h0h = h[0], h0l = h[1], h1h = h[2], h1l = h[3],
-      h2h = h[4], h2l = h[5], h3h = h[6], h3l = h[7],
-      h4h = h[8], h4l = h[9], h5h = h[10], h5l = h[11],
+      h0h = h[0],  h0l = h[1],  h1h = h[2],  h1l = h[3],
+      h2h = h[4],  h2l = h[5],  h3h = h[6],  h3l = h[7],
+      h4h = h[8],  h4l = h[9],  h5h = h[10], h5l = h[11],
       h6h = h[12], h6l = h[13], h7h = h[14], h7l = h[15];
 
     let ah = h0h, al = h0l, bh = h1h, bl = h1l,
@@ -121,7 +121,7 @@ export class SHA512 implements Hash {
         let gamma0h =
           ((gamma0xl << 31) | (gamma0xh >>> 1)) ^
           ((gamma0xl << 24) | (gamma0xh >>> 8)) ^
-          ((gamma0xh >>> 7));
+          (                   (gamma0xh >>> 7));
         let gamma0l =
           ((gamma0xh << 31) | (gamma0xl >>> 1)) ^
           ((gamma0xh << 24) | (gamma0xl >>> 8)) ^
@@ -132,29 +132,29 @@ export class SHA512 implements Hash {
         let gamma1xl = w[(i - 2) * 2 + 1];
         let gamma1h =
           ((gamma1xl << 13) | (gamma1xh >>> 19)) ^
-          ((gamma1xh << 3) | (gamma1xl >>> 29)) ^
-          ((gamma1xh >>> 6));
+          ((gamma1xh <<  3) | (gamma1xl >>> 29)) ^
+          (                   (gamma1xh >>>  6));
         let gamma1l =
           ((gamma1xh << 13) | (gamma1xl >>> 19)) ^
-          ((gamma1xl << 3) | (gamma1xh >>> 29)) ^
-          ((gamma1xh << 26) | (gamma1xl >>> 6));
+          ((gamma1xl <<  3) | (gamma1xh >>> 29)) ^
+          ((gamma1xh << 26) | (gamma1xl >>>  6));
 
         // shortcuts
-        let wr7h  = w[(i - 7) * 2],
-            wr7l  = w[(i - 7) * 2 + 1],
+        let wr7h  = w[(i -  7) * 2],
+            wr7l  = w[(i -  7) * 2 + 1],
             wr16h = w[(i - 16) * 2],
             wr16l = w[(i - 16) * 2 + 1];
 
         // W(round) = gamma0 + W(round - 7) + gamma1 + W(round - 16)
-        wrl = gamma0l + wr7l;
-        wrh = gamma0h + wr7h + ((wrl >>> 0) < (gamma0l >>> 0) ? 1 : 0);
+        wrl  = gamma0l + wr7l;
+        wrh  = gamma0h + wr7h + ((wrl >>> 0) < (gamma0l >>> 0) ? 1 : 0);
         wrl += gamma1l;
         wrh += gamma1h + ((wrl >>> 0) < (gamma1l >>> 0) ? 1 : 0);
         wrl += wr16l;
         wrh += wr16h + ((wrl >>> 0) < (wr16l >>> 0) ? 1 : 0);
       }
 
-      w[i * 2] = wrh |= 0;
+      w[i * 2]     = wrh |= 0;
       w[i * 2 + 1] = wrl |= 0;
 
       // Ch
@@ -211,21 +211,21 @@ export class SHA512 implements Hash {
     }
 
     // intermediate hash
-    h0l = h[1] = (h0l + al) | 0;
-    h[0] = (h0h + ah + ((h0l >>> 0) < (al >>> 0) ? 1 : 0)) | 0;
-    h1l = h[3] = (h1l + bl) | 0;
-    h[2] = (h1h + bh + ((h1l >>> 0) < (bl >>> 0) ? 1 : 0)) | 0;
-    h2l = h[5] = (h2l + cl) | 0;
-    h[4] = (h2h + ch + ((h2l >>> 0) < (cl >>> 0) ? 1 : 0)) | 0;
-    h3l = h[7] = (h3l + dl) | 0;
-    h[6] = (h3h + dh + ((h3l >>> 0) < (dl >>> 0) ? 1 : 0)) | 0;
-    h4l = h[9] = (h4l + el) | 0;
-    h[8] = (h4h + eh + ((h4l >>> 0) < (el >>> 0) ? 1 : 0)) | 0;
-    h5l = h[11] = (h5l + fl) | 0;
+    h0l   = h[1] = (h0l + al) | 0;
+    h[0]  = (h0h + ah + ((h0l >>> 0) < (al >>> 0) ? 1 : 0)) | 0;
+    h1l   = h[3] = (h1l + bl) | 0;
+    h[2]  = (h1h + bh + ((h1l >>> 0) < (bl >>> 0) ? 1 : 0)) | 0;
+    h2l   = h[5] = (h2l + cl) | 0;
+    h[4]  = (h2h + ch + ((h2l >>> 0) < (cl >>> 0) ? 1 : 0)) | 0;
+    h3l   = h[7] = (h3l + dl) | 0;
+    h[6]  = (h3h + dh + ((h3l >>> 0) < (dl >>> 0) ? 1 : 0)) | 0;
+    h4l   = h[9] = (h4l + el) | 0;
+    h[8]  = (h4h + eh + ((h4l >>> 0) < (el >>> 0) ? 1 : 0)) | 0;
+    h5l   = h[11] = (h5l + fl) | 0;
     h[10] = (h5h + fh + ((h5l >>> 0) < (fl >>> 0) ? 1 : 0)) | 0;
-    h6l = h[13] = (h6l + gl) | 0;
+    h6l   = h[13] = (h6l + gl) | 0;
     h[12] = (h6h + gh + ((h6l >>> 0) < (gl >>> 0) ? 1 : 0)) | 0;
-    h7l = h[15] = (h7l + hl) | 0;
+    h7l   = h[15] = (h7l + hl) | 0;
     h[14] = (h7h + hh + ((h7l >>> 0) < (hl >>> 0) ? 1 : 0)) | 0;
   }
 
@@ -236,22 +236,23 @@ export class SHA512 implements Hash {
    * @return {SHA512} this
    */
   update(msg?: Uint8Array): SHA512 {
-      msg = msg || new Uint8Array(0);
-      // process the msg as many times as possible, the rest is stored in the buffer
-      // message is processed in 1024 bit (128 byte chunks)
-      for (let i = 0; i < msg.length; i++) {
-        this.buffer[this.bufferIndex++] = msg[i];
-        if (this.bufferIndex === 128) {
-          this.transform();
-          this.bufferIndex = 0;
-        }
+    msg = msg || new Uint8Array(0);
+    // process the msg as many times as possible, the rest is stored in the buffer
+    // message is processed in 1024 bit (128 byte chunks)
+    for (let i = 0; i < msg.length; i++) {
+      this.buffer[this.bufferIndex++] = msg[i];
+      if (this.bufferIndex === 128) {
+        this.transform();
+        this.bufferIndex = 0;
       }
+    }
 
-      // counter update (number of message bits)
-      let c = this.count;
-      if ((c[0] += (msg.length << 3)) < (msg.length << 3))
-        c[1]++;
-      c[1] += (msg.length >>> 29);
+    // counter update (number of message bits)
+    let c = this.count;
+    if ((c[0] += (msg.length << 3)) < (msg.length << 3)) {
+      c[1]++;
+    }
+    c[1] += (msg.length >>> 29);
 
     return this;
   }
@@ -265,43 +266,43 @@ export class SHA512 implements Hash {
   digest(msg?: Uint8Array): Uint8Array {
     this.update(msg);
 
-        // append '1'
-        var b = this.buffer, idx = this.bufferIndex;
-        b[idx++] = 0x80;
+    // append '1'
+    var b = this.buffer, idx = this.bufferIndex;
+    b[idx++] = 0x80;
 
-        // zeropad up to byte pos 112
-        while (idx !== 112) {
-          if (idx === 128) {
-            this.transform();
-            idx = 0;
-          }
-          b[idx++] = 0;
-        }
-
-        // append length in bits
-        let c = this.count;
-        b[112] = b[113] = b[114] = b[115] = b[116] = b[117] = b[118] = b[119] = 0;
-        b[120] = (c[1] >>> 24) & 0xff;
-        b[121] = (c[1] >>> 16) & 0xff;
-        b[122] = (c[1] >>> 8) & 0xff;
-        b[123] = (c[1] >>> 0) & 0xff;
-        b[124] = (c[0] >>> 24) & 0xff;
-        b[125] = (c[0] >>> 16) & 0xff;
-        b[126] = (c[0] >>> 8) & 0xff;
-        b[127] = (c[0] >>> 0) & 0xff;
+    // zeropad up to byte pos 112
+    while (idx !== 112) {
+      if (idx === 128) {
         this.transform();
+        idx = 0;
+      }
+      b[idx++] = 0;
+    }
 
-        // return the hash as byte array
-        let hash = new Uint8Array(64);
-        for (let i = 0; i < 16; i++) {
-          hash[(i << 2) + 0] = (this.H[i] >>> 24) & 0xff;
-          hash[(i << 2) + 1] = (this.H[i] >>> 16) & 0xff;
-          hash[(i << 2) + 2] = (this.H[i] >>> 8) & 0xff;
-          hash[(i << 2) + 3] = (this.H[i] >>> 0) & 0xff;
-        }
+    // append length in bits
+    let c = this.count;
+    b[112] = b[113] = b[114] = b[115] = b[116] = b[117] = b[118] = b[119] = 0;
+    b[120] = (c[1] >>> 24) & 0xff;
+    b[121] = (c[1] >>> 16) & 0xff;
+    b[122] = (c[1] >>>  8) & 0xff;
+    b[123] = (c[1] >>>  0) & 0xff;
+    b[124] = (c[0] >>> 24) & 0xff;
+    b[125] = (c[0] >>> 16) & 0xff;
+    b[126] = (c[0] >>>  8) & 0xff;
+    b[127] = (c[0] >>>  0) & 0xff;
+    this.transform();
 
-        // clear internal states and prepare for new hash
-        this.init();
+    // return the hash as byte array
+    let hash = new Uint8Array(64);
+    for (let i = 0; i < 16; i++) {
+      hash[(i << 2) + 0] = (this.H[i] >>> 24) & 0xff;
+      hash[(i << 2) + 1] = (this.H[i] >>> 16) & 0xff;
+      hash[(i << 2) + 2] = (this.H[i] >>>  8) & 0xff;
+      hash[(i << 2) + 3] = (this.H[i] >>>  0) & 0xff;
+    }
+
+    // clear internal states and prepare for new hash
+    this.init();
 
     return hash;
   }
