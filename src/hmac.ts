@@ -11,10 +11,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,11 +28,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import { Convert, Util, Hash, KeyedHash } from "./base";
-import { ZeroPadding } from "./padding";
-import { SHA1 } from "./sha1";
-import { SHA256 } from "./sha256";
-import { SHA512 } from "./sha512";
+import { Convert, Util, Hash, KeyedHash } from './base';
+import { ZeroPadding } from './padding';
+import { SHA1 } from './sha1';
+import { SHA256 } from './sha256';
+import { SHA512 } from './sha512';
 
 
 /**
@@ -85,7 +85,7 @@ export class HMAC implements KeyedHash {
     this.hasher.init();
     this.hasher.update(this.iKeyPad);
     return this;
-  };
+  }
 
 
   /**
@@ -97,7 +97,7 @@ export class HMAC implements KeyedHash {
     msg = msg || new Uint8Array(0);
     this.hasher.update(msg);
     return this;
-  };
+  }
 
 
   /**
@@ -110,7 +110,7 @@ export class HMAC implements KeyedHash {
     let sum1 = this.hasher.digest(msg);   // get sum 1
     this.hasher.init();
     return this.hasher.update(this.oKeyPad).digest(sum1);
-  };
+  }
 
 
   /**
@@ -121,7 +121,7 @@ export class HMAC implements KeyedHash {
    */
   hash(key: Uint8Array, msg?: Uint8Array): Uint8Array {
     return this.init(key).digest(msg);
-  };
+  }
 
 
   /**

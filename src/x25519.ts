@@ -11,10 +11,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -87,7 +87,7 @@ export class Curve25519 {
       d |= x[xi + i] ^ y[yi + i];
     }
     return (1 & ((d - 1) >>> 8)) - 1;
-  };
+  }
 
 
   private A(o: Float64Array, a: Float64Array, b: Float64Array) {
@@ -97,7 +97,7 @@ export class Curve25519 {
   }
 
 
-  private Z(o: Float64Array, a: Float64Array, b:Float64Array) {
+  private Z(o: Float64Array, a: Float64Array, b: Float64Array) {
     for (let i = 0; i < 16; i++) {
       o[i] = a[i] - b[i];
     }
@@ -532,7 +532,7 @@ export class Curve25519 {
       p[i] ^= t;
       q[i] ^= t;
     }
-  };
+  }
 
 
   inv25519(o: Float64Array, i: Float64Array) {
@@ -712,7 +712,7 @@ export class Curve25519 {
     this.inv25519(x32, x32);
     this.M(x16, x16, x32);
     this.pack25519(q, x16);
-  };
+  }
 
 
   /**
@@ -858,7 +858,7 @@ export class Ed25519 implements Signature {
     }
     for (j = 0; j < 32; j++) x[j] -= carry * L[j];
     for (i = 0; i < 32; i++) {
-      x[i+1] += x[i] >>> 8;
+      x[i + 1] += x[i] >>> 8;
       r[i] = x[i] & 0xff;
     }
   }
@@ -879,7 +879,7 @@ export class Ed25519 implements Signature {
     CURVE.set25519(p[2], CURVE.gf1);
     CURVE.set25519(p[3], CURVE.gf0);
     for (let i = 255; i >= 0; --i) {
-      let b = (s[(i / 8)|0] >>> (i & 7)) & 1;
+      let b = (s[(i / 8) | 0] >>> (i & 7)) & 1;
       CURVE.cswap(p, q, b);
       CURVE.add(q, p);
       CURVE.add(p, p);
@@ -896,7 +896,7 @@ export class Ed25519 implements Signature {
     CURVE.set25519(q[2], CURVE.gf1);
     CURVE.M(q[3], this.X, this.Y);
     this.scalarmult(p, q, s);
-  };
+  }
 
 
   /**
@@ -962,7 +962,7 @@ export class Ed25519 implements Signature {
     for (i = 0; i < 32; i++) x[i] = r[i];
     for (i = 0; i < 32; i++) {
       for (let j = 0; j < 32; j++) {
-        x[i+j] += k[i] * h[j];
+        x[i + j] += k[i] * h[j];
       }
     }
     this.modL(s.subarray(32), x);

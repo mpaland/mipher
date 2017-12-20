@@ -11,10 +11,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +28,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import { Convert, Util, Hash } from "./base";
+import { Convert, Util, Hash } from './base';
 
 
 /**
@@ -184,8 +184,8 @@ export class SHA256 implements Hash {
     this.transform();
 
     // return the hash as byte array
-    let hash = new Uint8Array(32);
-    for (let i = 0; i < 8; i++) {
+    let hash = new Uint8Array(32), i;
+    for (i = 0; i < 8; i++) {
       hash[(i << 2) + 0] = (this.H[i] >>> 24) & 0xff;
       hash[(i << 2) + 1] = (this.H[i] >>> 16) & 0xff;
       hash[(i << 2) + 2] = (this.H[i] >>>  8) & 0xff;
@@ -215,9 +215,9 @@ export class SHA256 implements Hash {
    */
   selftest(): boolean {
     let cumulative = new SHA256(), sha = new SHA256();
-    let toBeHashed = '', hash;
-    for (let i = 0; i < 10; i++) {
-      for (let n = 100 * i; n < 100 * (i + 1); n++) {
+    let toBeHashed = '', hash, i, n;
+    for (i = 0; i < 10; i++) {
+      for (n = 100 * i; n < 100 * (i + 1); n++) {
         hash = Convert.bin2hex(sha.hash(Convert.str2bin(toBeHashed)));
         cumulative.update(Convert.str2bin(hash));
         toBeHashed = (hash.substring(0, 2) + toBeHashed).substring(0, n + 1);

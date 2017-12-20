@@ -11,10 +11,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 //
 // \brief UUID generation after RFC 4122
-//        Generates 128 bit UUIDs as V1 (time based) or V4 (random based) 
+//        Generates 128 bit UUIDs as V1 (time based) or V4 (random based)
 //        https://tools.ietf.org/html/rfc4122
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,13 +151,13 @@ export class UUID {
   toString(uuid: Uint8Array): string {
     if (uuid.length !== 16) return 'UUID format error';
     let i = 0, b2h = Convert.bin2hex;
-    return b2h(uuid.subarray(i,++i)) + b2h(uuid.subarray(i,++i)) +
-           b2h(uuid.subarray(i,++i)) + b2h(uuid.subarray(i,++i)) + '-' +
-           b2h(uuid.subarray(i,++i)) + b2h(uuid.subarray(i,++i)) + '-' +
-           b2h(uuid.subarray(i,++i)) + b2h(uuid.subarray(i,++i)) + '-' +
-           b2h(uuid.subarray(i,++i)) + b2h(uuid.subarray(i,++i)) + '-' +
-           b2h(uuid.subarray(i,++i)) + b2h(uuid.subarray(i,++i)) +
-           b2h(uuid.subarray(i,++i)) + b2h(uuid.subarray(i,++i)) +
-           b2h(uuid.subarray(i,++i)) + b2h(uuid.subarray(i,++i));
+    return b2h(uuid.subarray(i, ++i)) + b2h(uuid.subarray(i, ++i)) +
+           b2h(uuid.subarray(i, ++i)) + b2h(uuid.subarray(i, ++i)) + '-' +
+           b2h(uuid.subarray(i, ++i)) + b2h(uuid.subarray(i, ++i)) + '-' +
+           b2h(uuid.subarray(i, ++i)) + b2h(uuid.subarray(i, ++i)) + '-' +
+           b2h(uuid.subarray(i, ++i)) + b2h(uuid.subarray(i, ++i)) + '-' +
+           b2h(uuid.subarray(i, ++i)) + b2h(uuid.subarray(i, ++i)) +
+           b2h(uuid.subarray(i, ++i)) + b2h(uuid.subarray(i, ++i)) +
+           b2h(uuid.subarray(i, ++i)) + b2h(uuid.subarray(i, ++i));
   }
 }

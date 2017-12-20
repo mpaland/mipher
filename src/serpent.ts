@@ -11,10 +11,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -175,7 +175,7 @@ export class Serpent implements Blockcipher {
         r[x2] &= r[x3]; r[x3] |= r[x0]; r[x1] ^= r[x4]; r[x3] ^= r[x4]; r[x4] &= r[x0]; r[x4] ^= r[x2];
       }
     ];
-  };
+  }
 
 
   /**
@@ -223,7 +223,7 @@ export class Serpent implements Blockcipher {
     r[b] ^= this.key[4 * i + 1];
     r[c] ^= this.key[4 * i + 2];
     r[d] ^= this.key[4 * i + 3];
-  };
+  }
 
 
   private LK(r: any, a: number, b: number, c: number, d: number, e: number, i: number) {
@@ -248,7 +248,7 @@ export class Serpent implements Blockcipher {
     r[c]  = this.rotW(r[c], 22);
     r[a] ^= this.key[4 * i + 0];
     r[c] ^= this.key[4 * i + 2];
-  };
+  }
 
 
   private KL(r: any, a: number, b: number, c: number, d: number, e: number, i: number) {
@@ -273,7 +273,7 @@ export class Serpent implements Blockcipher {
     r[b] ^= r[c];
     r[d] ^= r[c];
     r[c]  = this.rotW(r[c], 29);
-  };
+  }
 
 
   /**

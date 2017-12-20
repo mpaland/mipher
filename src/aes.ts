@@ -11,10 +11,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -333,10 +333,10 @@ export class AES implements Blockcipher {
       0xd7cadc31, 0xd9c1d138, 0xcbdcc623, 0xc5d7cb2a, 0xefe6e815, 0xe1ede51c, 0xf3f0f207, 0xfdfbff0e, 0xa792b479, 0xa999b970, 0xbb84ae6b, 0xb58fa362, 0x9fbe805d, 0x91b58d54, 0x83a89a4f, 0x8da39746
     ]);
 
-    this.B0 = function (x) { return (x)        & 0xFF; };
-    this.B1 = function (x) { return (x >>>  8) & 0xFF; };
-    this.B2 = function (x) { return (x >>> 16) & 0xFF; };
-    this.B3 = function (x) { return (x >>> 24) & 0xFF; };
+    this.B0 = function (x) { return (x)        & 0xff; };
+    this.B1 = function (x) { return (x >>>  8) & 0xff; };
+    this.B2 = function (x) { return (x >>> 16) & 0xff; };
+    this.B3 = function (x) { return (x >>> 24) & 0xff; };
 
     this.F1 = function (x0, x1, x2, x3) {
       return this.B1(this.T1[x0 & 0xff]) | (this.B1(this.T1[(x1 >>> 8) & 0xff]) << 8) | (this.B1(this.T1[(x2 >>> 16) & 0xff]) << 16) | (this.B1(this.T1[x3 >>> 24]) << 24);

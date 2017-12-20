@@ -11,10 +11,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,14 +27,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import {SHA3_256, SHA3_512, SHAKE128, SHAKE256} from '../../src/sha3';
-import {Convert} from '../../src/base';
-import {sha3_256_vector} from './sha3_256_vectors';
-import {sha3_512_vector} from './sha3_512_vectors';
-import {shake128_vector} from './shake128_vectors';
-import {shake256_vector} from './shake256_vectors';
-import {shake128_vector_long} from './shake128_vectors_long';
-import {shake256_vector_long} from './shake256_vectors_long';
+import { SHA3_256, SHA3_512, SHAKE128, SHAKE256 } from '../../src/sha3';
+import { Convert } from '../../src/base';
+import { sha3_256_vector } from './sha3_256_vectors';
+import { sha3_512_vector } from './sha3_512_vectors';
+import { shake128_vector } from './shake128_vectors';
+import { shake256_vector } from './shake256_vectors';
+import { shake128_vector_long } from './shake128_vectors_long';
+import { shake256_vector_long } from './shake256_vectors_long';
 
 
 import chai = require('chai');

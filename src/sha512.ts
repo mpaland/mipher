@@ -11,10 +11,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +28,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import { Convert, Util, Hash } from "./base";
+import { Convert, Util, Hash } from './base';
 
 
 /**
@@ -293,8 +293,8 @@ export class SHA512 implements Hash {
     this.transform();
 
     // return the hash as byte array
-    let hash = new Uint8Array(64);
-    for (let i = 0; i < 16; i++) {
+    let hash = new Uint8Array(64), i;
+    for (i = 0; i < 16; i++) {
       hash[(i << 2) + 0] = (this.H[i] >>> 24) & 0xff;
       hash[(i << 2) + 1] = (this.H[i] >>> 16) & 0xff;
       hash[(i << 2) + 2] = (this.H[i] >>>  8) & 0xff;
