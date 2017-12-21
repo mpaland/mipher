@@ -31,9 +31,8 @@ import { ChaCha20 } from '../../src/chacha20';
 import { Convert } from '../../src/base';
 import { vector } from './chacha20_vectors';
 
-import chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
+import 'mocha';
 
 
 describe('ChaCha20', () => {

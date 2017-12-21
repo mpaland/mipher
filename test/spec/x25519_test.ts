@@ -31,9 +31,8 @@ import { Curve25519, Ed25519 } from '../../src/x25519';
 import { Convert } from '../../src/base';
 import { generate_vector, random_vector, original_vector, ed25519_vector } from './x25519_vectors';
 
-import chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
+import 'mocha';
 
 
 describe('curve25519', () => {

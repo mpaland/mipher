@@ -31,9 +31,8 @@ import { SHA1 } from '../../src/sha1';
 import { Convert } from '../../src/base';
 import { vector } from './sha1_vectors';
 
-import chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
+import 'mocha';
 
 
 describe('SHA1', () => {

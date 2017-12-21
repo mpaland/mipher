@@ -36,10 +36,8 @@ import { shake256_vector } from './shake256_vectors';
 import { shake128_vector_long } from './shake128_vectors_long';
 import { shake256_vector_long } from './shake256_vectors_long';
 
-
-import chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
+import 'mocha';
 
 
 describe('SHA3-256', () => {

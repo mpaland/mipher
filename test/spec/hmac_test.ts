@@ -32,9 +32,8 @@ import { SHA256 } from '../../src/sha256';
 import { Convert } from '../../src/base';
 import { vector } from './hmac_vectors';
 
-import chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
+import 'mocha';
 
 
 describe('HMAC', () => {

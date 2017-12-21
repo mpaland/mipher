@@ -30,9 +30,8 @@
 import { UUID } from '../../src/uuid';
 import { Convert } from '../../src/base';
 
-import chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
+import 'mocha';
 
 
 describe('UUID', () => {

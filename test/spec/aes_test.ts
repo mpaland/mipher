@@ -31,9 +31,8 @@ import { AES, AES_CBC_PKCS7 } from '../../src/aes';
 import { Convert } from '../../src/base';
 import { vector128, vector192, vector256, vectorCBC_PKCS7 } from './aes_vectors';
 
-import chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
+import 'mocha';
 
 
 describe('AES', () => {

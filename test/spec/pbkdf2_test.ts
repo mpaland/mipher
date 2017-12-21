@@ -33,9 +33,8 @@ import { HMAC } from '../../src/hmac';
 import { SHA256 } from '../../src/sha256';
 import { vector } from './pbkdf2_vectors';
 
-import chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
+import 'mocha';
 
 
 describe('PBKDF2', () => {

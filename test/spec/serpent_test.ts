@@ -31,9 +31,8 @@ import { Serpent, Serpent_CBC_PKCS7 } from '../../src/serpent';
 import { Convert } from '../../src/base';
 import { vector, vectorMonteCarloEncrypt, vectorMonteCarloDecrypt, vectorCBC_PKCS7 } from './serpent_vectors';
 
-import chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
+import 'mocha';
 
 
 describe('Serpent', () => {

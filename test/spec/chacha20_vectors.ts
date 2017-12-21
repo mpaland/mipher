@@ -31,7 +31,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-interface vector_type {
+export interface vector_type {
   key: string;
   iv:  string;
   ct:  string;
