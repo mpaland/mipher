@@ -1,11 +1,17 @@
 {
   "name": "mipher",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Marco Paland",
   "license": "MIT",
   "description": "Mobile Cipher crypto library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p ./src",
+    "pretest": "tsc -p ./test",
+    "test": "mocha ./test/out/test/**/*_test.js",
+    "dev": "lite-server"
+  },
   "dependencies": {},
   "devDependencies": {
     "typescript": "latest",
@@ -15,15 +21,6 @@
     "mocha": "^4.0.1",
     "@types/chai": "^4.0.10",
     "@types/mocha": "^2.2.44"
-  },
-  "scripts": {
-    "build": "tsc -p ./src",
-    "pretest": "tsc -p ./test",
-    "test": "mocha ./test/out/test/**/*_test.js",
-    "dev": "lite-server"
-  },
-  "directories": {
-    "test": "test"
   },
   "repository": {
     "type": "git",
@@ -37,10 +34,15 @@
     "Chacha20",
     "Curve25519",
     "Ed25519",
+    "SHA-1",
+    "SHA.256",
+    "SHA-512",
     "SHA-3",
+    "SHAKE",
     "HMAC",
     "PBKDF2",
-    "UUID"
+    "UUID",
+    "Fortuna"
   ],
   "bugs": {
     "url": "https://github.com/mpaland/mipher/issues"
