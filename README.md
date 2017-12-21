@@ -35,8 +35,13 @@ A collection of common crypto algorithms, optimized for speed and size.
 
 
 ## Usage
-TBD, have a look in the test cases.
+Import the mipher module as `mipher` and create your according crypto object:
+```typescript
+import * as mipher from 'mipher';
 
+let aes = new mipher.AES();
+let ct  = aes.encrypt(key, pt);
+```
 
 ## Test suite
 mipher is using the mocha test suite for testing.
