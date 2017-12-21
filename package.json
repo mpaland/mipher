@@ -1,21 +1,25 @@
 {
   "name": "mipher",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Marco Paland",
   "license": "MIT",
   "description": "Mobile Cipher crypto library",
-  "dependencies": {
-    "lite-server": "latest",
-    "typescript": "latest"
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {},
   "devDependencies": {
+    "typescript": "latest",
+    "lite-server": "latest",
+    "ts-node": "^4.0.2",
     "chai": "^4.1.2",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "@types/chai": "^4.0.10",
+    "@types/mocha": "^2.2.44"
   },
   "scripts": {
-    "build": "tsc",
-    "pretest": "npm run build",
-    "test": "mocha ./js/test/spec/**/*_test.js",
+    "build": "tsc -p ./src",
+    "pretest": "tsc -p ./test",
+    "test": "mocha ./test/out/test/**/*_test.js",
     "dev": "lite-server"
   },
   "directories": {
