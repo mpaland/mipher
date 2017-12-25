@@ -1,6 +1,6 @@
 {
   "name": "mipher",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "author": "Marco Paland",
   "license": "MIT",
   "description": "Mobile Cipher crypto library",
@@ -16,11 +16,11 @@
   "devDependencies": {
     "typescript": "latest",
     "lite-server": "latest",
-    "ts-node": "^4.0.2",
+    "ts-node": "^4.1.0",
     "chai": "^4.1.2",
     "mocha": "^4.0.1",
     "@types/chai": "^4.0.10",
-    "@types/mocha": "^2.2.44"
+    "@types/mocha": "^2.2.45"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,7 @@
     "SHA.256",
     "SHA-512",
     "SHA-3",
+    "Keccak",
     "SHAKE",
     "HMAC",
     "PBKDF2",
