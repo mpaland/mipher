@@ -358,6 +358,36 @@ export class Keccak implements Hash {
 
 
 /**
+ * Keccak-256 class
+ */
+export class Keccak_256 extends Keccak {
+  constructor() {
+    super(256, 1);
+  }
+}
+
+
+/**
+ * Keccak-384 class
+ */
+export class Keccak_384 extends Keccak {
+  constructor() {
+    super(384, 1);
+  }
+}
+
+
+/**
+ * SHA3-512 class
+ */
+export class Keccak_512 extends Keccak {
+  constructor() {
+    super(512, 1);
+  }
+}
+
+
+/**
  * SHA3-256 class
  */
 export class SHA3_256 extends Keccak {
@@ -368,7 +398,7 @@ export class SHA3_256 extends Keccak {
 
 
 /**
- * SHA3-256 class
+ * SHA3-384 class
  */
 export class SHA3_384 extends Keccak {
   constructor() {

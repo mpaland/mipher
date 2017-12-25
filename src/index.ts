@@ -38,6 +38,6 @@ export { HMAC, HMAC_SHA1, HMAC_SHA256, HMAC_SHA512 } from './hmac';
 export { SHA1 } from './sha1';
 export { SHA256 } from './sha256';
 export { SHA512 } from './sha512';
-export { SHA3_256, SHA3_384, SHA3_512, SHAKE128, SHAKE256 } from './sha3';
+export { Keccak, Keccak_256, Keccak_384, Keccak_512, SHA3_256, SHA3_384, SHA3_512, SHAKE128, SHAKE256 } from './sha3';
 export { UUID } from './uuid';
 export { Random } from './random';

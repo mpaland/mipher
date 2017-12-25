@@ -27,7 +27,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import { SHA3_256, SHA3_512, SHAKE128, SHAKE256 } from '../../src/sha3';
+import { Keccak_384, SHA3_256, SHA3_512, SHAKE128, SHAKE256 } from '../../src/sha3';
 import { Convert } from '../../src/base';
 import { sha3_256_vector } from './sha3_256_vectors';
 import { sha3_512_vector } from './sha3_512_vectors';
@@ -38,6 +38,19 @@ import { shake256_vector_long } from './shake256_vectors_long';
 
 import { expect, assert } from 'chai';
 import 'mocha';
+
+
+describe('Keccak-384', () => {
+  let sha = new Keccak_384();
+
+  describe('hash', () => {
+    it('check testvector "Message"', () => {
+      let pt = 'Message';
+      let ct = '0c8d6ff6e6a1cf18a0d55b20f0bca160d0d1c914a5e842f3707a25eeb20a279f6b4e83eda8e43a67697832c7f69f53ca';
+      expect(Convert.bin2hex(sha.hash(Convert.str2bin(pt)))).to.deep.equal(ct);
+    });
+  });
+});
 
 
 describe('SHA3-256', () => {
