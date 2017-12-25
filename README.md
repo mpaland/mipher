@@ -1,8 +1,9 @@
 # mipher
 
 [![npm version](https://badge.fury.io/js/mipher.svg)](https://badge.fury.io/js/mipher)
+[![Github Issues](https://img.shields.io/github/issues/mpaland/mipher.svg)](http://github.com/mpaland/mipher/issues)
 [![Github Releases](https://img.shields.io/github/release/mpaland/mipher.svg)](https://github.com/mpaland/mipher/releases)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mpaland/avl_array/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mpaland/mipher/master/LICENSE)
 
 **M**obile C**ipher** crypto library written in clean TypeScript
 
@@ -11,7 +12,7 @@
 There are a lot of crypto libs in JS around, but I needed a clean, lightweight, fast and simple lib for mobile devices in TypeScript. That's **mipher**.  
 A collection of common crypto algorithms, optimized for speed and size.
 
- - Usage of modern `Uint8Array` as message data types
+ - Only usage of modern typed arrays `Uint8Array` as message/data types
  - Fast and simple, no dependencies
  - Own crypto random generator (using a FORTUNA implementation)
  - Extensive passing test suite
@@ -25,7 +26,7 @@ A collection of common crypto algorithms, optimized for speed and size.
  - Curve25519, Ed25519
  - HMAC
  - PBKDF2
- - SHA-1, SHA-256, SHA-512, SHA-3, SHAKE
+ - SHA-1, SHA-256, SHA-512, SHA-3, Keccak, SHAKE
  - UUID
  - Random generator
  - Blockmodes (ECB, CBC, CTR)
@@ -45,7 +46,7 @@ let ct  = aes.encrypt(key, pt);
 
 ## Test suite
 mipher is using the mocha test suite for testing.
-To do all tests just run `npm test`.
+To do all tests just run `npm run test`.
 
 
 ## Contributing
