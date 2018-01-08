@@ -367,17 +367,22 @@ export namespace Util {
 
 
   /**
+   * Clear an array
+   * @param {Uint8Array} Array to clear
+   */
+  export function clear(data: Uint8Array): void {
+    data.fill(0);
+  }
+
+
+  /**
    * XOR two arrays and return the result array
    * @param {Uint8Array} lh First array of bytes
    * @param {Uint8Array} rh Second array of bytes
    * @return {Uint8Array} XORed result array
    */
   export function xor(lh: Uint8Array, rh: Uint8Array): Uint8Array {
-    let x = new Uint8Array(lh.length);
-    for (let i = 0, len = lh.length; i < len; i++) {
-      x[i] = lh[i] ^ rh[i];
-    }
-    return x;
+    return lh.map((val, ind) => val ^ rh[ind]);
   }
 
 

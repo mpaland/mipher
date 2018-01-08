@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -27,7 +27,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-import { Convert } from '../../src/base';
+import { Convert, Util } from '../../src/base';
 
 import { expect, assert } from 'chai';
 import 'mocha';
@@ -37,13 +37,14 @@ declare var atob;
 declare var btoa;
 
 describe('Convert', () => {
+
   describe('hex2bin', () => {
     it('check hex to bin', () => {
       for (let strlen = 0; strlen < 256; strlen++) {
         let exp = new Uint8Array(strlen);
-        let inp = "";
+        let inp = '';
         for (let i = 0; i < strlen; i++) {
-          inp += (i < 16 ? "0" : "") + i.toString(16);
+          inp += (i < 16 ? '0' : '') + i.toString(16);
           exp[i] = i;
         }
         expect(Convert.hex2bin(inp)).to.deep.equal(exp);
@@ -55,11 +56,11 @@ describe('Convert', () => {
     it('check bin to hex', () => {
       for (let strlen = 0; strlen < 256; strlen++) {
         let inp = new Uint8Array(strlen);
-        let expL = "";
-        let expU = "";
+        let expL = '';
+        let expU = '';
         for (let i = 0; i < strlen; i++) {
-          expL += (i < 16 ? "0" : "") + i.toString(16).toLowerCase();
-          expU += (i < 16 ? "0" : "") + i.toString(16).toUpperCase();
+          expL += (i < 16 ? '0' : '') + i.toString(16).toLowerCase();
+          expU += (i < 16 ? '0' : '') + i.toString(16).toUpperCase();
           inp[i] = i;
         }
         expect(Convert.bin2hex(inp)).to.deep.equal(expL);
@@ -129,6 +130,39 @@ describe('Convert', () => {
         }
         expect(bin).to.deep.equal(Convert.base642bin(Convert.bin2base64(bin, true)));
       }
+    });
+  });
+});
+
+
+describe('Util', () => {
+
+  describe('clear', () => {
+    it('should set all array elements to 0', () => {
+      let bin = new Uint8Array(300);
+      for (let n = 0; n < 300; n++) {
+        bin[n] = (Math.floor(Math.random() * 0xff));
+      }
+      Util.clear(bin);
+      let zero = new Uint8Array(300);
+      expect(bin).to.deep.equal(zero);
+    });
+  });
+
+  describe('xor', () => {
+    it('should xor two arrays', () => {
+      let bin1 = new Uint8Array(300);
+      let bin2 = new Uint8Array(300);
+      for (let n = 0; n < 300; n++) {
+        bin1[n] = (Math.floor(Math.random() * 0xff));
+        bin2[n] = (Math.floor(Math.random() * 0xff));
+      }
+      let xor1 = Util.xor(bin1, bin2);
+      let xor2 = new Uint8Array(300);
+      for (let n = 0; n < 300; n++) {
+        xor2[n] = bin1[n] ^ bin2[n];
+      }
+      expect(xor1).to.deep.equal(xor2);
     });
   });
 
