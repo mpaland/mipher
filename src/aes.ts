@@ -443,7 +443,7 @@ export class AES implements Blockcipher {
    * @param {Array} key
    * @return {Object} .rounds and .rk2
    */
-  private prepare_decryption(key: Uint8Array): { rk: number[]; rounds: number } {
+  private prepare_decryption(key: Uint8Array): { rk: Array<Array<number>>; rounds: number } {
     let r, w = 0;
     let maxrk = 14;
     let rk2 = [];
@@ -511,6 +511,11 @@ export class AES implements Blockcipher {
 
     // security clear
     t0 = t1 = t2 = t3 = 0;
+    for (let r = 0; r < ctx.rk.length; r++) {
+      for (let i = 0; i < ctx.rk[r].length; i++) {
+        ctx.rk[r][i] = 0;
+      }
+    }
 
     return this.unpackBytes(b);
   }
@@ -557,6 +562,11 @@ export class AES implements Blockcipher {
 
     // security clear
     t0 = t1 = t2 = t3 = 0;
+    for (let r = 0; r < ctx.rk.length; r++) {
+      for (let i = 0; i < ctx.rk[r].length; i++) {
+        ctx.rk[r][i] = 0;
+      }
+    }
 
     return this.unpackBytes(b);
   }
