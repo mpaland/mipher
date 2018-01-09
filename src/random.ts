@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015-2016, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -56,10 +56,11 @@ export class Random {
   active: boolean;
   timer: number;
 
+
   /**
    * ctor
    * @param {Number} numPools Number of pools used for entropy acquisition. Defaults to 32 pools, use 16 on limited entropy sources
-   * @param {Uint8Array} entropy Optional array of any length with initial (true) random data
+   * @param {Uint8Array} entropy Optional array of any length with initial (true) random data (the more the better)
    */
   constructor(numPools: number = 32, entropy?: Uint8Array) {
     // constants
@@ -90,9 +91,19 @@ export class Random {
 
 
   /**
-   * Stop the generator
+   * Start the generator (public wrapper for init())
+   * Normally start/stop is not necessary, init() is called from ctor
    */
-  stop() {
+  start(): void {
+    this.init();
+  }
+
+
+  /**
+   * Stop the generator
+   * Normally stopping is not necessary
+   */
+  stop(): void {
     this.stopCollectors();
   }
 
@@ -110,23 +121,25 @@ export class Random {
    * Add external given entropy
    * @param {Uint8Array} entropy Random bytes to be added to the entropy pools
    */
-  addEntropy(entropy: Uint8Array) {
-    this.addRandomEvent(entropy, this.robin.rnd, entropy.length / 8);
+  addEntropy(entropy: Uint8Array): void {
+    this.addRandomEvent(entropy, this.robin.rnd, entropy.length * 8);
   }
 
 
   ///////////////////////////////////////////////////////////////////////////////
   // G E N E R A T O R
 
-  private init(entropy?: Uint8Array) {
+  /**
+   * Init/start the module (called by ctor as 'autostart')
+   * @param {Uint8Array} entropy Optional array of any length of (true) random bytes to be added to the entropy pools
+   */
+  private init(entropy?: Uint8Array): void {
     // pool init
     let i;
     for (i = 0; i < this.NUM_POOLS; i++) {
       this.poolData[i].init();
     }
 
-    // extra entropy
-    entropy = entropy || (new SHA256()).hash(Convert.str2bin(Math.random().toString() + (new Date().valueOf()).toString()));
     // explicit generator init
     for (i = 0; i < 32; i++) { this.genKey[i] = 0; }    // 32 byte key for AES256
     for (i = 0; i < 16; i++) { this.genCnt[i] = 0; }    // 16 byte counter
@@ -135,18 +148,23 @@ export class Random {
     this.lastReseed = 0;
 
     // try to get an initial seed, use crypto.random instead of a seed file
-    if (typeof window !== 'undefined' && window.crypto && typeof window.crypto.getRandomValues === 'function') {
-      // crypto random is available
-      for (i = 0; i < this.NUM_POOLS * 4; i++) {
-        this.collectorCryptoRandom();
-      }
+    for (i = 0; i < this.NUM_POOLS * 4; i++) {
+      this.collectorCryptoRandom();
     }
     if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-      this.addRandomEvent(Convert.str2bin(performance.timing.navigationStart.toString()), this.robin.time, 1);
+      this.addRandomEvent(Convert.str2bin(performance.now().toString()), this.robin.time, 2);
     }
-    this.collectorTime();
+    if (typeof process !== 'undefined' && typeof process.hrtime === 'function') {
+      this.addRandomEvent(Convert.str2bin(process.hrtime()[0].toString() + process.hrtime()[1].toString()), this.robin.time, 2);
+    }
+
+    // add some entropy from DOM
     this.collectorDom();
-    this.addRandomEvent(entropy, this.robin.rnd, entropy.length / 8);   // add given entropy
+
+    // extra entropy
+    if (entropy) {
+      this.addRandomEvent(entropy, this.robin.rnd, entropy.length * 8);   // add given entropy
+    }
 
     this.startCollectors();
   }
@@ -254,7 +272,7 @@ export class Random {
   /**
    * Start the built-in entropy collectors
    */
-  private startCollectors() {
+  private startCollectors(): void {
     if (this.active) { return; }
 
     if (typeof window !== 'undefined' && window.addEventListener) {
@@ -263,10 +281,11 @@ export class Random {
       window.addEventListener('scroll', this.collectorScroll.bind(this), true);
       window.addEventListener('mousemove', this.throttle(this.collectorMouse, 50, this), true);
       window.addEventListener('devicemotion', this.throttle(this.collectorMotion, 100, this), true);
+      window.addEventListener('deviceorientation', this.collectorMotion.bind(this), true);
+      window.addEventListener('orientationchange', this.collectorMotion.bind(this), true);
       window.addEventListener('touchmove', this.throttle(this.collectorTouch, 50, this), true);
       window.addEventListener('touchstart', this.collectorTouch.bind(this), true);
       window.addEventListener('touchend', this.collectorTouch.bind(this), true);
-      window.addEventListener('orientationchange', this.collectorMotion.bind(this), true);
       window.addEventListener('load', this.collectorTime.bind(this), true);
     }
     else if (typeof document !== 'undefined' && document.addEventListener) {
@@ -275,10 +294,8 @@ export class Random {
       document.addEventListener('mousemove', this.throttle(this.collectorMouse, 50, this), true);
     }
 
-    if (typeof window !== 'undefined' && typeof window.crypto !== 'undefined' && typeof window.crypto.getRandomValues === 'function') {
-      // crypto random API is available
-      this.timer = setInterval(this.collectorCryptoRandom.bind(this), 4000);
-    }
+    // start timer, add additional crypto random from system source every 3 sec
+    this.timer = setInterval(this.collectorCryptoRandom.bind(this), 3000);
 
     this.active = true;
   }
@@ -287,7 +304,7 @@ export class Random {
   /**
    * Stop the built-in entropy collectors
    */
-  private stopCollectors() {
+  private stopCollectors(): void {
     if (!this.active) { return; }
 
     if (typeof window !== 'undefined' && window.addEventListener) {
@@ -296,10 +313,11 @@ export class Random {
       window.removeEventListener('scroll', this.collectorScroll, true);
       window.removeEventListener('mousemove', this.collectorMouse, true);
       window.removeEventListener('devicemotion', this.collectorMotion, true);
+      window.removeEventListener('deviceorientation', this.collectorMotion, true);
+      window.removeEventListener('orientationchange', this.collectorMotion, true);
       window.removeEventListener('touchmove', this.collectorTouch, true);
       window.removeEventListener('touchstart', this.collectorTouch, true);
       window.removeEventListener('touchend', this.collectorTouch, true);
-      window.removeEventListener('orientationchange', this.collectorMotion, true);
       window.removeEventListener('load', this.collectorTime, true);
     }
     else if (typeof document !== 'undefined' && document.addEventListener) {
@@ -308,10 +326,8 @@ export class Random {
       document.removeEventListener('mousemove', this.collectorMouse, true);
     }
 
-    if (typeof window !== 'undefined' && typeof window.crypto !== 'undefined' && typeof window.crypto.getRandomValues === 'function') {
-      // crypto random is available
-      clearInterval(this.timer);
-    }
+    // stop timer
+    clearInterval(this.timer);
 
     this.active = false;
   }
@@ -321,6 +337,7 @@ export class Random {
    * In case of an event burst (eg. motion events), this executes the given fn once every threshold
    * @param {Function} fn Function to be throttled
    * @param {number} threshold Threshold in [ms]
+   * @param {Object} scope Optional scope, defaults to 'this'
    * @returns {Function} Resulting function
    */
   private throttle(fn: Function, threshold: number, scope?: Object) {
@@ -342,29 +359,35 @@ export class Random {
   }
 
 
-  private addRandomEvent(data: Uint8Array, pool_idx: number, entropy: number = 1) {
+  /**
+   * Add entropy data to pool
+   * @param data {Uint8Array} Entropy data to add
+   * @param pool_idx {Number} Pool index number to add the entropy data to
+   * @param entropy {Number} Added entropy data quality in bits
+   */
+  private addRandomEvent(data: Uint8Array, pool_idx: number, entropy: number = 1): void {
     this.poolEntropy[pool_idx] += entropy;
     this.entropy_level += entropy;
     this.poolData[pool_idx].update(Convert.int2bin(this.eventId++)).update(data);
   }
 
 
-  private collectorKeyboard(ev: any) {
+  private collectorKeyboard(ev: any): void {
     this.addRandomEvent(new Uint8Array([Convert.str2bin(ev.key || ev.char)[0] || ev.keyCode, (ev.timeStamp || 0) & 0xFF]), this.robin.kbd, 1);
     this.robin.kbd = ++this.robin.kbd % this.NUM_POOLS;
     this.collectorTime();
-    this.collectorCryptoRandom();
   }
 
 
-  private collectorMouse(ev: any) {
+  private collectorMouse(ev: any): void {
     let x = ev.x || ev.clientX || ev.offsetX || 0,
         y = ev.y || ev.clientY || ev.offsetY || 0;
     this.addRandomEvent(new Uint8Array([x >>> 8, x & 0xff, y >>> 8, y & 0xff]), this.robin.mouse, 2);
     this.robin.mouse = ++this.robin.mouse % this.NUM_POOLS;
   }
 
-  private collectorClick(ev: any) {
+
+  private collectorClick(ev: any): void {
     let x = ev.x || ev.clientX || ev.offsetX || 0,
         y = ev.y || ev.clientY || ev.offsetY || 0;
     this.addRandomEvent(new Uint8Array([x >>> 8, x & 0xff, y >>> 8, y & 0xff]), this.robin.mouse, 2);
@@ -373,7 +396,7 @@ export class Random {
   }
 
 
-  private collectorTouch(ev: any) {
+  private collectorTouch(ev: any): void {
     let touch = ev.touches[0] || ev.changedTouches[0];
     let x = touch.pageX || touch.clientX || 0,
         y = touch.pageY || touch.clientY || 0;
@@ -383,21 +406,23 @@ export class Random {
   }
 
 
-  private collectorScroll(ev: any) {
+  private collectorScroll(ev: any): void {
     let x = window.pageXOffset || window.scrollX,
         y = window.pageYOffset || window.scrollY;
     this.addRandomEvent(new Uint8Array([x >>> 8, x & 0xff, y >>> 8, y & 0xff]), this.robin.scroll, 1);
     this.robin.scroll = ++this.robin.scroll % this.NUM_POOLS;
-    this.collectorTime();
   }
 
 
-  private collectorMotion(ev: any) {
+  private collectorMotion(ev: any): void {
     if (typeof ev !== 'undefined' && typeof ev.accelerationIncludingGravity !== 'undefined') {
       let x = ev.accelerationIncludingGravity.x || 0,
           y = ev.accelerationIncludingGravity.y || 0,
           z = ev.accelerationIncludingGravity.z || 0;
       this.addRandomEvent(new Uint8Array([(x * 100) & 0xff, (y * 100) & 0xff, (z * 100) & 0xff]), this.robin.motion, 3);
+    }
+    if (typeof ev !== 'undefined' && typeof ev.alpha === 'number' && typeof ev.beta === 'number' && typeof ev.gamma === 'number') {
+      this.addRandomEvent(Convert.str2bin(ev.alpha.toString() + ev.beta.toString() + ev.gamma.toString()), this.robin.motion, 3);
     }
     if (typeof window !== 'undefined' && typeof window.orientation !== 'undefined') {
       this.addRandomEvent(Convert.str2bin(window.orientation.toString()), this.robin.motion, 1);
@@ -406,18 +431,18 @@ export class Random {
   }
 
 
-  private collectorTime() {
+  private collectorTime(): void {
     if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
       this.addRandomEvent(Convert.str2bin(performance.now().toString()), this.robin.time, 2);
     }
     else {
-      this.addRandomEvent(Convert.number2bin(Date.now()), this.robin.time, 1);
+      this.addRandomEvent(Convert.number2bin(Date.now()), this.robin.time, 2);
     }
     this.robin.time = ++this.robin.time % this.NUM_POOLS;
   }
 
 
-  private collectorDom() {
+  private collectorDom(): void {
     if (typeof document !== 'undefined' && document.documentElement) {
       this.addRandomEvent((new SHA256()).hash(Convert.str2bin(document.documentElement.innerHTML)), this.robin.dom, 2);
       this.robin.dom = ++this.robin.dom % this.NUM_POOLS;
@@ -425,16 +450,27 @@ export class Random {
   }
 
 
-  private collectorCryptoRandom() {
-    if (typeof window !== 'undefined' && window.crypto && typeof window.crypto.getRandomValues === 'function') {
+  private collectorCryptoRandom(): void {
+    // check if running in nodeish env
+    if (typeof process !== 'undefined' && typeof process.pid === 'number') {
+      // running on node
       try {
-        let rnd = new Uint8Array(32);
-        window.crypto.getRandomValues(rnd);
-        this.addRandomEvent(rnd, this.robin.rnd, 256);
+        let crypto = require('crypto');
+        let rnd = crypto.randomBytes(128);
+        this.addRandomEvent(rnd, this.robin.rnd, 1024);
         this.robin.rnd = ++this.robin.rnd % this.NUM_POOLS;
       }
-      catch (e) {
+      catch (e) { }
+    }
+    if (typeof window !== 'undefined' && window.crypto && typeof window.crypto.getRandomValues === 'function') {
+      // running in browser env
+      try {
+        let rnd = new Uint8Array(128);
+        window.crypto.getRandomValues(rnd);
+        this.addRandomEvent(rnd, this.robin.rnd, 1024);
+        this.robin.rnd = ++this.robin.rnd % this.NUM_POOLS;
       }
+      catch (e) { }
     }
   }
 }
