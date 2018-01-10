@@ -1,6 +1,7 @@
 # mipher
 
-[![npm version](https://badge.fury.io/js/mipher.svg)](https://badge.fury.io/js/mipher)
+[![npm](https://img.shields.io/npm/v/mipher.svg)](https://www.npmjs.com/package/mipher)
+[![npm](https://img.shields.io/npm/dt/mipher.svg)](https://www.npmjs.com/package/mipher)
 [![Github Issues](https://img.shields.io/github/issues/mpaland/mipher.svg)](http://github.com/mpaland/mipher/issues)
 [![Github Releases](https://img.shields.io/github/release/mpaland/mipher.svg)](https://github.com/mpaland/mipher/releases)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mpaland/mipher/master/LICENSE)
