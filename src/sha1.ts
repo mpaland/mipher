@@ -81,6 +81,8 @@ export class SHA1 implements Hash {
     this.H = new Uint32Array([0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]);
     this.bufferIndex = 0;
     this.count = new Uint32Array(2);
+    Util.clear(this.buffer);
+
     return this;
   }
 

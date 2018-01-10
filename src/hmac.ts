@@ -81,6 +81,9 @@ export class HMAC implements KeyedHash {
       this.oKeyPad[i] = this.oPad ^ _key[i];
     }
 
+    // security: delete the key
+    Util.clear(_key);
+
     // initial hash
     this.hasher.init();
     this.hasher.update(this.iKeyPad);

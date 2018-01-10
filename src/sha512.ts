@@ -83,6 +83,7 @@ export class SHA512 implements Hash {
                               0x510e527f, 0xade682d1, 0x9b05688c, 0x2b3e6c1f, 0x1f83d9ab, 0xfb41bd6b, 0x5be0cd19, 0x137e2179]);
     this.bufferIndex = 0;
     this.count = new Uint32Array(2);
+    Util.clear(this.buffer);
 
     return this;
   }

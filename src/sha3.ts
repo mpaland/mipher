@@ -70,6 +70,7 @@ export class Keccak implements Hash {
     for (let i = 0; i < 50; i++) {
       this.s[i] = 0;
     }
+    Util.clear(this.buffer);
     this.bufferIndex = 0;
 
     return this;

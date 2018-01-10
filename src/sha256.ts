@@ -72,6 +72,8 @@ export class SHA256 implements Hash {
     this.bufferIndex = 0;
     this.count = new Uint32Array(2);
     this.count[0] = this.count[1] = 0;
+    Util.clear(this.buffer);
+
     return this;
   }
 
