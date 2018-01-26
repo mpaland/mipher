@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015-2016, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -46,13 +46,13 @@ import { SHA512 } from './SHA512';
  * Curve25519 class
  */
 export class Curve25519 {
-  gf0: Float64Array;
-  gf1: Float64Array;
-  D:   Float64Array;
-  D2:  Float64Array;
-  I:   Float64Array;
+  gf0: Int32Array;
+  gf1: Int32Array;
+  D:   Int32Array;
+  D2:  Int32Array;
+  I:   Int32Array;
   _9:  Uint8Array;
-  _121665: Float64Array;
+  _121665: Int32Array;
 
 
   /**
@@ -70,8 +70,8 @@ export class Curve25519 {
   }
 
 
-  gf(init?: Array<number>): Float64Array {
-    let r = new Float64Array(16);
+  gf(init?: Array<number>): Int32Array {
+    let r = new Int32Array(16);
     if (init) {
       for (let i = 0; i < init.length; i++) {
         r[i] = init[i];
@@ -81,30 +81,25 @@ export class Curve25519 {
   }
 
 
-  verify_32(x: Uint8Array, xi: number, y: Uint8Array, yi: number): number {
-    let d = 0;
-    for (let i = 0; i < 32; i++) {
-      d |= x[xi + i] ^ y[yi + i];
-    }
-    return (1 & ((d - 1) >>> 8)) - 1;
-  }
-
-
-  private A(o: Float64Array, a: Float64Array, b: Float64Array) {
+  private A(o: Int32Array, a: Int32Array, b: Int32Array): void {
+    // using 'for' loop is faster as 'map' in 2018-01
     for (let i = 0; i < 16; i++) {
       o[i] = a[i] + b[i];
     }
   }
 
 
-  private Z(o: Float64Array, a: Float64Array, b: Float64Array) {
+  private Z(o: Int32Array, a: Int32Array, b: Int32Array): void {
+    // using 'for' loop is faster as 'map' in 2018-01
     for (let i = 0; i < 16; i++) {
       o[i] = a[i] - b[i];
     }
   }
 
 
-  M(o: Float64Array, a: Float64Array, b: Float64Array) {
+  M(o: Int32Array, a: Int32Array, b: Int32Array): void {
+    // performance: using discrete vars instead of an array and
+    // avoidance of 'for' loops here increases performance by factor 3
     let v, c,
       t0  = 0, t1  = 0, t2  = 0, t3  = 0, t4  = 0, t5  = 0, t6  = 0, t7  = 0,
       t8  = 0, t9  = 0, t10 = 0, t11 = 0, t12 = 0, t13 = 0, t14 = 0, t15 = 0,
@@ -419,7 +414,7 @@ export class Curve25519 {
 
     // first car
     c = 1;
-    v = t0  + c + 65535; c = Math.floor(v / 65536); t0  = v - c * 65536;
+    v = t0  + c + 65535; c = Math.floor(v / 65536); t0  = v - c * 65536;  // values may by negative, so no shifts here
     v = t1  + c + 65535; c = Math.floor(v / 65536); t1  = v - c * 65536;
     v = t2  + c + 65535; c = Math.floor(v / 65536); t2  = v - c * 65536;
     v = t3  + c + 65535; c = Math.floor(v / 65536); t3  = v - c * 65536;
@@ -476,12 +471,12 @@ export class Curve25519 {
   }
 
 
-  private S(o: Float64Array, a: Float64Array) {
+  private S(o: Int32Array, a: Int32Array): void {
     this.M(o, a, a);
   }
 
 
-  add(p, q) {
+  add(p: Array<Int32Array>, q: Array<Int32Array>): void {
     let a = this.gf(), b = this.gf(), c = this.gf(),
         d = this.gf(), e = this.gf(), f = this.gf(),
         g = this.gf(), h = this.gf(), t = this.gf();
@@ -507,14 +502,14 @@ export class Curve25519 {
   }
 
 
-  set25519(r, a) {
+  set25519(r: Int32Array, a: Int32Array): void {
     for (let i = 0; i < 16; i++) {
-      r[i] = a[i] | 0;
+      r[i] = a[i];
     }
   }
 
 
-  private car25519(o) {
+  private car25519(o: Int32Array): void {
     let i, v, c = 1;
     for (i = 0; i < 16; i++) {
       v = o[i] + c + 65535;
@@ -525,7 +520,8 @@ export class Curve25519 {
   }
 
 
-  private sel25519(p: Float64Array, q: Float64Array, b: number) {
+  private sel25519(p: Int32Array, q: Int32Array, b: number): void {
+    // b is 0 or 1
     let i, t, c = ~(b - 1);
     for (i = 0; i < 16; i++) {
       t = c & (p[i] ^ q[i]);
@@ -535,7 +531,7 @@ export class Curve25519 {
   }
 
 
-  inv25519(o: Float64Array, i: Float64Array) {
+  inv25519(o: Int32Array, i: Int32Array): void {
     let a, c = this.gf();
     for (a = 0; a < 16; a++) {
       c[a] = i[a];
@@ -552,22 +548,22 @@ export class Curve25519 {
   }
 
 
-  private neq25519(a: Float64Array, b: Float64Array): number {
+  private neq25519(a: Int32Array, b: Int32Array): boolean {
     let c = new Uint8Array(32), d = new Uint8Array(32);
     this.pack25519(c, a);
     this.pack25519(d, b);
-    return this.verify_32(c, 0, d, 0);
-  }
+    return !Util.compare(c, d);
+   }
 
 
-  par25519(a: Float64Array): number {
+  par25519(a: Int32Array): number {
     let d = new Uint8Array(32);
     this.pack25519(d, a);
     return d[0] & 1;
   }
 
 
-  private pow2523(o: Float64Array, i: Float64Array) {
+  private pow2523(o: Int32Array, i: Int32Array): void {
     let a, c = this.gf();
     for (a = 0; a < 16; a++)
       c[a] = i[a];
@@ -580,14 +576,14 @@ export class Curve25519 {
   }
 
 
-  cswap(p: Array<Float64Array>, q: Array<Float64Array>, b: number) {
+  cswap(p: Array<Int32Array>, q: Array<Int32Array>, b: number): void {
     for (let i = 0; i < 4; i++) {
       this.sel25519(p[i], q[i], b);
     }
   }
 
 
-  pack25519(o: Uint8Array, n: Float64Array) {
+  pack25519(o: Uint8Array, n: Int32Array): void {
     let i, m = this.gf(), t = this.gf();
     for (i = 0; i < 16; i++) {
       t[i] = n[i];
@@ -613,7 +609,7 @@ export class Curve25519 {
   }
 
 
-  private unpack25519(o: Float64Array, n: Uint8Array) {
+  private unpack25519(o: Int32Array, n: Uint8Array): void {
     for (let i = 0; i < 16; i++) {
       o[i] = n[2 * i] + (n[2 * i + 1] << 8);
     }
@@ -621,7 +617,7 @@ export class Curve25519 {
   }
 
 
-  unpackneg(r, p): number {
+  unpackNeg(r: Array<Int32Array>, p: Uint8Array): number {
     let t = this.gf(), chk = this.gf(), num = this.gf(), den = this.gf(), den2 = this.gf(), den4 = this.gf(), den6 = this.gf();
 
     this.set25519(r[2], this.gf1);
@@ -649,7 +645,9 @@ export class Curve25519 {
 
     this.S(chk, r[0]);
     this.M(chk, chk, den);
-    if (this.neq25519(chk, num)) return -1;
+    if (this.neq25519(chk, num)) {
+      return -1;
+    }
 
     if (this.par25519(r[0]) === (p[31] >>> 7)) this.Z(r[0], this.gf0, r[0]);
 
@@ -664,9 +662,8 @@ export class Curve25519 {
    * @param s Secret key
    * @param p Public key
    */
-  private crypto_scalarmult(q: Uint8Array, s: Uint8Array, p: Uint8Array) {
-    let z = new Uint8Array(s);
-    let x = new Float64Array(80), r, i;
+  private crypto_scalarmult(q: Uint8Array, s: Uint8Array, p: Uint8Array): void {
+    let x = new Int32Array(80), r, i;
     let a = this.gf(), b = this.gf(), c = this.gf(),
         d = this.gf(), e = this.gf(), f = this.gf();
 
@@ -677,7 +674,7 @@ export class Curve25519 {
     }
     a[0] = d[0] = 1;
     for (i = 254; i >= 0; --i) {
-      r = (z[i >>> 3] >>> (i & 7)) & 1;
+      r = (s[i >>> 3] >>> (i & 7)) & 1;
       this.sel25519(a, b, r);
       this.sel25519(c, d, r);
       this.A(e, a, c);
@@ -734,7 +731,7 @@ export class Curve25519 {
    * @param {Object} Returns sk (Secret key) and pk (Public key) as 32 byte typed arrays
    */
   generateKeys(seed: Uint8Array): { sk: Uint8Array, pk: Uint8Array } {
-    let sk = new Uint8Array(seed);
+    let sk = seed.slice();
     let pk = new Uint8Array(32);
     if (sk.length !== 32) {
       return;
@@ -758,24 +755,24 @@ export class Curve25519 {
   selftest(): boolean {
     const key = [
       {
-        sk: "77076d0a7318a57d3c16c17251b26645df4c2f87ebc0992ab177fba51db92c2a",
-        pk: "8520f0098930a754748b7ddcb43ef75a0dbf3a0d26381af4eba4a98eaa9b4e6a"
+        sk: '77076d0a7318a57d3c16c17251b26645df4c2f87ebc0992ab177fba51db92c2a',
+        pk: '8520f0098930a754748b7ddcb43ef75a0dbf3a0d26381af4eba4a98eaa9b4e6a'
       },
       {
-        sk: "5dab087e624a8a4b79e17f8b83800ee66f3bb1292618b6fd1c2f8b27ff88e0eb",
-        pk: "de9edb7d7b7dc1b4d35b61c2ece435373f8343c85b78674dadfc7e146f882b4f"
+        sk: '5dab087e624a8a4b79e17f8b83800ee66f3bb1292618b6fd1c2f8b27ff88e0eb',
+        pk: 'de9edb7d7b7dc1b4d35b61c2ece435373f8343c85b78674dadfc7e146f882b4f'
       }
     ];
     const mul = [
       {
-        sk: "0300000000000000000000000000000000000000000000000000000000000000",
-        pk: "0900000000000000000000000000000000000000000000000000000000000000",
-        sp: "123c71fbaf030ac059081c62674e82f864ba1bc2914d5345e6ab576d1abc121c"
+        sk: '0300000000000000000000000000000000000000000000000000000000000000',
+        pk: '0900000000000000000000000000000000000000000000000000000000000000',
+        sp: '123c71fbaf030ac059081c62674e82f864ba1bc2914d5345e6ab576d1abc121c'
       },
       {
-        sk: "847c4978577d530dcb491d58bcc9cba87f9e075e6e02c003f27aee503cecb641",
-        pk: "57faa45404f10f1e4733047eca8f2f3001c12aa859e40d74cf59afaabe441d45",
-        sp: "b3c49b94dcc349ba05ca13521e19d1b93fc472f1545bbf9bdf7ec7b442be4a2c"
+        sk: '847c4978577d530dcb491d58bcc9cba87f9e075e6e02c003f27aee503cecb641',
+        pk: '57faa45404f10f1e4733047eca8f2f3001c12aa859e40d74cf59afaabe441d45',
+        sp: 'b3c49b94dcc349ba05ca13521e19d1b93fc472f1545bbf9bdf7ec7b442be4a2c'
       }
     ];
 
@@ -809,8 +806,9 @@ export class Curve25519 {
 export class Ed25519 implements Signature {
   curve:  Curve25519;
   sha512: SHA512;
-  X:      Float64Array;
-  Y:      Float64Array;
+  X:      Int32Array;
+  Y:      Int32Array;
+  L:      Uint8Array;
 
 
   /**
@@ -821,10 +819,11 @@ export class Ed25519 implements Signature {
     this.sha512 = new SHA512();
     this.X = this.curve.gf([0xd51a, 0x8f25, 0x2d60, 0xc956, 0xa7b2, 0x9525, 0xc760, 0x692c, 0xdc5c, 0xfdd6, 0xe231, 0xc0a4, 0x53fe, 0xcd6e, 0x36d3, 0x2169]);
     this.Y = this.curve.gf([0x6658, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666]);
+    this.L = new Uint8Array([0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10]);
   }
 
 
-  private pack(r: Uint8Array, p: Array<Float64Array>) {
+  private pack(r: Uint8Array, p: Array<Int32Array>): void {
     let CURVE = this.curve;
     let tx = CURVE.gf(),
         ty = CURVE.gf(),
@@ -837,14 +836,13 @@ export class Ed25519 implements Signature {
   }
 
 
-  private modL(r: Uint8Array, x: Float64Array) {
-    let L = new Uint8Array([0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10]);
+  private modL(r: Uint8Array, x: Uint32Array): void {
     let carry, i, j, k;
     for (i = 63; i >= 32; --i) {
       carry = 0;
       for (j = i - 32, k = i - 12; j < k; ++j) {
-        x[j] += carry - 16 * x[i] * L[j - (i - 32)];
-        carry = (x[j] + 128) >> 8;  // caution: NO >>> here, carry is needed!!!
+        x[j] += carry - 16 * x[i] * this.L[j - (i - 32)];
+        carry = (x[j] + 128) >> 8;                // caution: NO >>> here, carry is needed!!!
         x[j] -= carry * 256;
       }
       x[j] += carry;
@@ -852,11 +850,11 @@ export class Ed25519 implements Signature {
     }
     carry = 0;
     for (j = 0; j < 32; j++) {
-      x[j] += carry - (x[31] >> 4) * L[j];
-      carry = x[j] >> 8;            // caution: NO >>> here, carry is needed!!!
+      x[j] += carry - (x[31] >> 4) * this.L[j];   // caution: NO >>> here, carry is needed!!!
+      carry = x[j] >> 8;                          // caution: NO >>> here, carry is needed!!!
       x[j] &= 255;
     }
-    for (j = 0; j < 32; j++) x[j] -= carry * L[j];
+    for (j = 0; j < 32; j++) x[j] -= carry * this.L[j];
     for (i = 0; i < 32; i++) {
       x[i + 1] += x[i] >>> 8;
       r[i] = x[i] & 0xff;
@@ -864,15 +862,16 @@ export class Ed25519 implements Signature {
   }
 
 
-  private reduce(r: Uint8Array) {
-    let x = new Float64Array(64), i;
-    for (i = 0; i < 64; i++) x[i] = r[i];
-    for (i = 0; i < 64; i++) r[i] = 0;
+  private reduce(r: Uint8Array): void {
+    let i, x = new Uint32Array(64);
+    for (i = 0; i < 64; i++) {
+      x[i] = r[i];
+    }
     this.modL(r, x);
   }
 
 
-  private scalarmult(p: Array<Float64Array>, q: Array<Float64Array>, s: Uint8Array) {
+  private scalarmult(p: Array<Int32Array>, q: Array<Int32Array>, s: Uint8Array): void {
     let CURVE = this.curve;
     CURVE.set25519(p[0], CURVE.gf0);
     CURVE.set25519(p[1], CURVE.gf1);
@@ -888,7 +887,7 @@ export class Ed25519 implements Signature {
   }
 
 
-  private scalarbase(p: Array<Float64Array>, s: Uint8Array) {
+  private scalarbase(p: Array<Int32Array>, s: Uint8Array): void {
     let CURVE = this.curve;
     let q = [CURVE.gf(), CURVE.gf(), CURVE.gf(), CURVE.gf()];
     CURVE.set25519(q[0], this.X);
@@ -906,7 +905,7 @@ export class Ed25519 implements Signature {
    * @param {Object} Returns sk (Secret key) and pk (Public key) as 32 byte typed arrays
    */
   generateKeys(seed: Uint8Array): { sk: Uint8Array, pk: Uint8Array } {
-    let sk = new Uint8Array(seed);
+    let sk = seed.slice();
     let pk = new Uint8Array(32);
     if (sk.length !== 32) {
       return;
@@ -954,14 +953,14 @@ export class Ed25519 implements Signature {
     this.pack(s, p);
 
     // compute k = SHA512(R || A || M)
-    let k = this.sha512.init().update(s.subarray(0,32)).update(pk).digest(msg);
+    let k = this.sha512.init().update(s.subarray(0, 32)).update(pk).digest(msg);
     this.reduce(k);
 
     // compute s = (r + k a) mod q
-    let x = new Float64Array(64), i;
+    let x = new Uint32Array(64), i, j;
     for (i = 0; i < 32; i++) x[i] = r[i];
     for (i = 0; i < 32; i++) {
-      for (let j = 0; j < 32; j++) {
+      for (j = 0; j < 32; j++) {
         x[i + j] += k[i] * h[j];
       }
     }
@@ -985,10 +984,10 @@ export class Ed25519 implements Signature {
 
     if (sig.length !== 64) return false;
     if (pk.length !== 32) return false;
-    if (CURVE.unpackneg(q, pk)) return false;
+    if (CURVE.unpackNeg(q, pk)) return false;
 
     // compute k = SHA512(R || A || M)
-    let k = this.sha512.init().update(sig.subarray(0,32)).update(pk).digest(msg);
+    let k = this.sha512.init().update(sig.subarray(0, 32)).update(pk).digest(msg);
     this.reduce(k);
     this.scalarmult(p, q, k);
 
@@ -997,7 +996,7 @@ export class Ed25519 implements Signature {
     CURVE.add(p, q);
     this.pack(t, p);
 
-    return CURVE.verify_32(sig, 0, t, 0) === 0;
+    return Util.compare(sig.subarray(0, 32), t);
   }
 
 
@@ -1007,18 +1006,18 @@ export class Ed25519 implements Signature {
    */
   selftest(): boolean {
     const v = [
-      { sk: "9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60",
-        pk: "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
-        m : "",
-        s : "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b" },
-      { sk: "4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb",
-        pk: "3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c",
-        m : "72",
-        s : "92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00" },
-      { sk: "5b5a619f8ce1c66d7ce26e5a2ae7b0c04febcd346d286c929e19d0d5973bfef9",
-        pk: "6fe83693d011d111131c4f3fbaaa40a9d3d76b30012ff73bb0e39ec27ab18257",
-        m : "5a8d9d0a22357e6655f9c785",
-        s : "0f9ad9793033a2fa06614b277d37381e6d94f65ac2a5a94558d09ed6ce922258c1a567952e863ac94297aec3c0d0c8ddf71084e504860bb6ba27449b55adc40e" }
+      { sk: '9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60',
+        pk: 'd75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a',
+        m : '',
+        s : 'e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b' },
+      { sk: '4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb',
+        pk: '3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c',
+        m : '72',
+        s : '92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00' },
+      { sk: '5b5a619f8ce1c66d7ce26e5a2ae7b0c04febcd346d286c929e19d0d5973bfef9',
+        pk: '6fe83693d011d111131c4f3fbaaa40a9d3d76b30012ff73bb0e39ec27ab18257',
+        m : '5a8d9d0a22357e6655f9c785',
+        s : '0f9ad9793033a2fa06614b277d37381e6d94f65ac2a5a94558d09ed6ce922258c1a567952e863ac94297aec3c0d0c8ddf71084e504860bb6ba27449b55adc40e' }
     ];
 
     for (let i = 0; i < v.length; i++) {
