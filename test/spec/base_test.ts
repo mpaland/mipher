@@ -149,6 +149,21 @@ describe('Util', () => {
     });
   });
 
+  describe('compare', () => {
+    it('should compare two arrays', () => {
+      let ar1 = new Uint8Array(300);
+      for (let n = 0; n < 300; n++) {
+        ar1[n] = (Math.floor(Math.random() * 0xff));
+      }
+      let ar2 = ar1.slice();
+      expect(Util.compare(ar1, ar2)).to.equal(true);
+      ar1[100] ^= 1;
+      expect(Util.compare(ar1, ar2)).to.equal(false);
+      ar2 = ar1.slice(0, 299);
+      expect(Util.compare(ar1, ar2)).to.equal(false);
+    });
+  });
+
   describe('xor', () => {
     it('should xor two arrays', () => {
       let bin1 = new Uint8Array(300);
