@@ -368,9 +368,9 @@ export namespace Util {
 
   /**
    * Clear an array
-   * @param {Uint8Array} Array to clear
+   * @param {Uint8Array | Uint16Array | Uint32Array} Array to clear
    */
-  export function clear(data: Uint8Array): void {
+  export function clear(data: Uint8Array | Uint16Array | Uint32Array): void {
     data.fill(0);
   }
 
