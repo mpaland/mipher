@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015-2016, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -49,27 +49,28 @@ export class SHA512 implements Hash {
   constructor() {
     this.hashSize = 64;
     this.buffer = new Uint8Array(128); // 128 byte array
-    this.K = new Uint32Array(
-      [0x428a2f98, 0xd728ae22, 0x71374491, 0x23ef65cd, 0xb5c0fbcf, 0xec4d3b2f, 0xe9b5dba5, 0x8189dbbc,
-       0x3956c25b, 0xf348b538, 0x59f111f1, 0xb605d019, 0x923f82a4, 0xaf194f9b, 0xab1c5ed5, 0xda6d8118,
-       0xd807aa98, 0xa3030242, 0x12835b01, 0x45706fbe, 0x243185be, 0x4ee4b28c, 0x550c7dc3, 0xd5ffb4e2,
-       0x72be5d74, 0xf27b896f, 0x80deb1fe, 0x3b1696b1, 0x9bdc06a7, 0x25c71235, 0xc19bf174, 0xcf692694,
-       0xe49b69c1, 0x9ef14ad2, 0xefbe4786, 0x384f25e3, 0x0fc19dc6, 0x8b8cd5b5, 0x240ca1cc, 0x77ac9c65,
-       0x2de92c6f, 0x592b0275, 0x4a7484aa, 0x6ea6e483, 0x5cb0a9dc, 0xbd41fbd4, 0x76f988da, 0x831153b5,
-       0x983e5152, 0xee66dfab, 0xa831c66d, 0x2db43210, 0xb00327c8, 0x98fb213f, 0xbf597fc7, 0xbeef0ee4,
-       0xc6e00bf3, 0x3da88fc2, 0xd5a79147, 0x930aa725, 0x06ca6351, 0xe003826f, 0x14292967, 0x0a0e6e70,
-       0x27b70a85, 0x46d22ffc, 0x2e1b2138, 0x5c26c926, 0x4d2c6dfc, 0x5ac42aed, 0x53380d13, 0x9d95b3df,
-       0x650a7354, 0x8baf63de, 0x766a0abb, 0x3c77b2a8, 0x81c2c92e, 0x47edaee6, 0x92722c85, 0x1482353b,
-       0xa2bfe8a1, 0x4cf10364, 0xa81a664b, 0xbc423001, 0xc24b8b70, 0xd0f89791, 0xc76c51a3, 0x0654be30,
-       0xd192e819, 0xd6ef5218, 0xd6990624, 0x5565a910, 0xf40e3585, 0x5771202a, 0x106aa070, 0x32bbd1b8,
-       0x19a4c116, 0xb8d2d0c8, 0x1e376c08, 0x5141ab53, 0x2748774c, 0xdf8eeb99, 0x34b0bcb5, 0xe19b48a8,
-       0x391c0cb3, 0xc5c95a63, 0x4ed8aa4a, 0xe3418acb, 0x5b9cca4f, 0x7763e373, 0x682e6ff3, 0xd6b2b8a3,
-       0x748f82ee, 0x5defb2fc, 0x78a5636f, 0x43172f60, 0x84c87814, 0xa1f0ab72, 0x8cc70208, 0x1a6439ec,
-       0x90befffa, 0x23631e28, 0xa4506ceb, 0xde82bde9, 0xbef9a3f7, 0xb2c67915, 0xc67178f2, 0xe372532b,
-       0xca273ece, 0xea26619c, 0xd186b8c7, 0x21c0c207, 0xeada7dd6, 0xcde0eb1e, 0xf57d4f7f, 0xee6ed178,
-       0x06f067aa, 0x72176fba, 0x0a637dc5, 0xa2c898a6, 0x113f9804, 0xbef90dae, 0x1b710b35, 0x131c471b,
-       0x28db77f5, 0x23047d84, 0x32caab7b, 0x40c72493, 0x3c9ebe0a, 0x15c9bebc, 0x431d67c4, 0x9c100d4c,
-       0x4cc5d4be, 0xcb3e42b6, 0x597f299c, 0xfc657e2a, 0x5fcb6fab, 0x3ad6faec, 0x6c44198c, 0x4a475817]);
+    this.K = new Uint32Array([
+      0x428a2f98, 0xd728ae22, 0x71374491, 0x23ef65cd, 0xb5c0fbcf, 0xec4d3b2f, 0xe9b5dba5, 0x8189dbbc,
+      0x3956c25b, 0xf348b538, 0x59f111f1, 0xb605d019, 0x923f82a4, 0xaf194f9b, 0xab1c5ed5, 0xda6d8118,
+      0xd807aa98, 0xa3030242, 0x12835b01, 0x45706fbe, 0x243185be, 0x4ee4b28c, 0x550c7dc3, 0xd5ffb4e2,
+      0x72be5d74, 0xf27b896f, 0x80deb1fe, 0x3b1696b1, 0x9bdc06a7, 0x25c71235, 0xc19bf174, 0xcf692694,
+      0xe49b69c1, 0x9ef14ad2, 0xefbe4786, 0x384f25e3, 0x0fc19dc6, 0x8b8cd5b5, 0x240ca1cc, 0x77ac9c65,
+      0x2de92c6f, 0x592b0275, 0x4a7484aa, 0x6ea6e483, 0x5cb0a9dc, 0xbd41fbd4, 0x76f988da, 0x831153b5,
+      0x983e5152, 0xee66dfab, 0xa831c66d, 0x2db43210, 0xb00327c8, 0x98fb213f, 0xbf597fc7, 0xbeef0ee4,
+      0xc6e00bf3, 0x3da88fc2, 0xd5a79147, 0x930aa725, 0x06ca6351, 0xe003826f, 0x14292967, 0x0a0e6e70,
+      0x27b70a85, 0x46d22ffc, 0x2e1b2138, 0x5c26c926, 0x4d2c6dfc, 0x5ac42aed, 0x53380d13, 0x9d95b3df,
+      0x650a7354, 0x8baf63de, 0x766a0abb, 0x3c77b2a8, 0x81c2c92e, 0x47edaee6, 0x92722c85, 0x1482353b,
+      0xa2bfe8a1, 0x4cf10364, 0xa81a664b, 0xbc423001, 0xc24b8b70, 0xd0f89791, 0xc76c51a3, 0x0654be30,
+      0xd192e819, 0xd6ef5218, 0xd6990624, 0x5565a910, 0xf40e3585, 0x5771202a, 0x106aa070, 0x32bbd1b8,
+      0x19a4c116, 0xb8d2d0c8, 0x1e376c08, 0x5141ab53, 0x2748774c, 0xdf8eeb99, 0x34b0bcb5, 0xe19b48a8,
+      0x391c0cb3, 0xc5c95a63, 0x4ed8aa4a, 0xe3418acb, 0x5b9cca4f, 0x7763e373, 0x682e6ff3, 0xd6b2b8a3,
+      0x748f82ee, 0x5defb2fc, 0x78a5636f, 0x43172f60, 0x84c87814, 0xa1f0ab72, 0x8cc70208, 0x1a6439ec,
+      0x90befffa, 0x23631e28, 0xa4506ceb, 0xde82bde9, 0xbef9a3f7, 0xb2c67915, 0xc67178f2, 0xe372532b,
+      0xca273ece, 0xea26619c, 0xd186b8c7, 0x21c0c207, 0xeada7dd6, 0xcde0eb1e, 0xf57d4f7f, 0xee6ed178,
+      0x06f067aa, 0x72176fba, 0x0a637dc5, 0xa2c898a6, 0x113f9804, 0xbef90dae, 0x1b710b35, 0x131c471b,
+      0x28db77f5, 0x23047d84, 0x32caab7b, 0x40c72493, 0x3c9ebe0a, 0x15c9bebc, 0x431d67c4, 0x9c100d4c,
+      0x4cc5d4be, 0xcb3e42b6, 0x597f299c, 0xfc657e2a, 0x5fcb6fab, 0x3ad6faec, 0x6c44198c, 0x4a475817
+    ]);
     this.init();
   }
 
@@ -92,7 +93,7 @@ export class SHA512 implements Hash {
   /**
    * Perform one transformation cycle
    */
-  private transform() {
+  private transform(): void {
     let h = this.H,
       h0h = h[0],  h0l = h[1],  h1h = h[2],  h1l = h[3],
       h2h = h[4],  h2l = h[5],  h3h = h[6],  h3l = h[7],
@@ -104,93 +105,94 @@ export class SHA512 implements Hash {
         eh = h4h, el = h4l, fh = h5h, fl = h5l,
         gh = h6h, gl = h6l, hh = h7h, hl = h7l;
 
-    // convert byte buffer to 32 bit
-    let w = new Uint32Array(160), i;
-    for (i = 31; i >= 0; i--) {
-      w[i] = (this.buffer[(i << 2) + 3]) | (this.buffer[(i << 2) + 2] << 8) | (this.buffer[(i << 2) + 1] << 16) | (this.buffer[i << 2] << 24);
+    // convert byte buffer into w[0..31]
+    let i, w = new Uint32Array(160);
+    for (i = 0; i < 32; i++) {
+      w[i] = (this.buffer[(i << 2) + 3]      ) |
+             (this.buffer[(i << 2) + 2] <<  8) |
+             (this.buffer[(i << 2) + 1] << 16) |
+             (this.buffer[(i << 2)    ] << 24);
     }
 
+    // fill w[32..159]
+    let gamma0xl, gamma0xh, gamma0l, gamma0h, gamma1xl, gamma1xh, gamma1l, gamma1h,
+        wrl, wrh, wr7l, wr7h, wr16l, wr16h;
+    for (i = 16; i < 80; i++) {
+      // Gamma0
+      gamma0xh = w[(i - 15) * 2];
+      gamma0xl = w[(i - 15) * 2 + 1];
+      gamma0h  = ((gamma0xl << 31) | (gamma0xh >>> 1)) ^
+                 ((gamma0xl << 24) | (gamma0xh >>> 8)) ^
+                 (                   (gamma0xh >>> 7));
+      gamma0l  = ((gamma0xh << 31) | (gamma0xl >>> 1)) ^
+                 ((gamma0xh << 24) | (gamma0xl >>> 8)) ^
+                 ((gamma0xh << 25) | (gamma0xl >>> 7));
+
+      // Gamma1
+      gamma1xh = w[(i - 2) * 2];
+      gamma1xl = w[(i - 2) * 2 + 1];
+      gamma1h  = ((gamma1xl << 13) | (gamma1xh >>> 19)) ^
+                 ((gamma1xh <<  3) | (gamma1xl >>> 29)) ^
+                 (                   (gamma1xh >>>  6));
+      gamma1l  = ((gamma1xh << 13) | (gamma1xl >>> 19)) ^
+                 ((gamma1xl <<  3) | (gamma1xh >>> 29)) ^
+                 ((gamma1xh << 26) | (gamma1xl >>>  6));
+
+      // shortcuts
+      wr7h  = w[(i -  7) * 2],
+      wr7l  = w[(i -  7) * 2 + 1],
+      wr16h = w[(i - 16) * 2],
+      wr16l = w[(i - 16) * 2 + 1];
+
+      // W(round) = gamma0 + W(round - 7) + gamma1 + W(round - 16)
+      wrl  = gamma0l + wr7l;
+      wrh  = gamma0h + wr7h + ((wrl >>> 0) < (gamma0l >>> 0) ? 1 : 0);
+      wrl += gamma1l;
+      wrh += gamma1h + ((wrl >>> 0) < (gamma1l >>> 0) ? 1 : 0);
+      wrl += wr16l;
+      wrh += wr16h + ((wrl >>> 0) < (wr16l >>> 0) ? 1 : 0);
+
+      // store
+      w[i * 2]     = wrh;
+      w[i * 2 + 1] = wrl;
+    }
+
+    // compress
+    let chl, chh, majl, majh, sig0l, sig0h, sig1l, sig1h, krl, krh, t1l, t1h, t2l, t2h;
     for (i = 0; i < 80; i++) {
-      let wrh, wrl;
-      if (i < 16) {
-        wrh = w[i * 2];
-        wrl = w[i * 2 + 1];
-      } else {
-        // Gamma0
-        let gamma0xh = w[(i - 15) * 2];
-        let gamma0xl = w[(i - 15) * 2 + 1];
-        let gamma0h =
-          ((gamma0xl << 31) | (gamma0xh >>> 1)) ^
-          ((gamma0xl << 24) | (gamma0xh >>> 8)) ^
-          (                   (gamma0xh >>> 7));
-        let gamma0l =
-          ((gamma0xh << 31) | (gamma0xl >>> 1)) ^
-          ((gamma0xh << 24) | (gamma0xl >>> 8)) ^
-          ((gamma0xh << 25) | (gamma0xl >>> 7));
-
-        // Gamma1
-        let gamma1xh = w[(i - 2) * 2];
-        let gamma1xl = w[(i - 2) * 2 + 1];
-        let gamma1h =
-          ((gamma1xl << 13) | (gamma1xh >>> 19)) ^
-          ((gamma1xh <<  3) | (gamma1xl >>> 29)) ^
-          (                   (gamma1xh >>>  6));
-        let gamma1l =
-          ((gamma1xh << 13) | (gamma1xl >>> 19)) ^
-          ((gamma1xl <<  3) | (gamma1xh >>> 29)) ^
-          ((gamma1xh << 26) | (gamma1xl >>>  6));
-
-        // shortcuts
-        let wr7h  = w[(i -  7) * 2],
-            wr7l  = w[(i -  7) * 2 + 1],
-            wr16h = w[(i - 16) * 2],
-            wr16l = w[(i - 16) * 2 + 1];
-
-        // W(round) = gamma0 + W(round - 7) + gamma1 + W(round - 16)
-        wrl  = gamma0l + wr7l;
-        wrh  = gamma0h + wr7h + ((wrl >>> 0) < (gamma0l >>> 0) ? 1 : 0);
-        wrl += gamma1l;
-        wrh += gamma1h + ((wrl >>> 0) < (gamma1l >>> 0) ? 1 : 0);
-        wrl += wr16l;
-        wrh += wr16h + ((wrl >>> 0) < (wr16l >>> 0) ? 1 : 0);
-      }
-
-      w[i * 2]     = wrh |= 0;
-      w[i * 2 + 1] = wrl |= 0;
-
       // Ch
-      let chh = (eh & fh) ^ (~eh & gh);
-      let chl = (el & fl) ^ (~el & gl);
+      chh = (eh & fh) ^ (~eh & gh);
+      chl = (el & fl) ^ (~el & gl);
 
       // Maj
-      let majh = (ah & bh) ^ (ah & ch) ^ (bh & ch);
-      let majl = (al & bl) ^ (al & cl) ^ (bl & cl);
+      majh = (ah & bh) ^ (ah & ch) ^ (bh & ch);
+      majl = (al & bl) ^ (al & cl) ^ (bl & cl);
 
       // Sigma0
-      let sigma0h = ((al << 4) | (ah >>> 28)) ^ ((ah << 30) | (al >>> 2)) ^ ((ah << 25) | (al >>> 7));
-      let sigma0l = ((ah << 4) | (al >>> 28)) ^ ((al << 30) | (ah >>> 2)) ^ ((al << 25) | (ah >>> 7));
+      sig0h = ((al << 4) | (ah >>> 28)) ^ ((ah << 30) | (al >>> 2)) ^ ((ah << 25) | (al >>> 7));
+      sig0l = ((ah << 4) | (al >>> 28)) ^ ((al << 30) | (ah >>> 2)) ^ ((al << 25) | (ah >>> 7));
 
       // Sigma1
-      let sigma1h = ((el << 18) | (eh >>> 14)) ^ ((el << 14) | (eh >>> 18)) ^ ((eh << 23) | (el >>> 9));
-      let sigma1l = ((eh << 18) | (el >>> 14)) ^ ((eh << 14) | (el >>> 18)) ^ ((el << 23) | (eh >>> 9));
+      sig1h = ((el << 18) | (eh >>> 14)) ^ ((el << 14) | (eh >>> 18)) ^ ((eh << 23) | (el >>> 9));
+      sig1l = ((eh << 18) | (el >>> 14)) ^ ((eh << 14) | (el >>> 18)) ^ ((el << 23) | (eh >>> 9));
 
       // K(round)
-      let krh = this.K[i * 2];
-      let krl = this.K[i * 2 + 1];
+      krh = this.K[i * 2];
+      krl = this.K[i * 2 + 1];
 
       // t1 = h + sigma1 + ch + K(round) + W(round)
-      let t1l = hl + sigma1l;
-      let t1h = hh + sigma1h + ((t1l >>> 0) < (hl >>> 0) ? 1 : 0);
+      t1l =  hl + sig1l;
+      t1h =  hh + sig1h + ((t1l >>> 0) < (hl >>> 0) ? 1 : 0);
       t1l += chl;
       t1h += chh + ((t1l >>> 0) < (chl >>> 0) ? 1 : 0);
       t1l += krl;
       t1h += krh + ((t1l >>> 0) < (krl >>> 0) ? 1 : 0);
-      t1l = t1l + wrl | 0;
-      t1h += wrh + ((t1l >>> 0) < (wrl >>> 0) ? 1 : 0);
+      t1l =  t1l + w[i * 2 + 1];
+      t1h += w[i * 2] + ((t1l >>> 0) < (w[i * 2 + 1] >>> 0) ? 1 : 0);
 
       // t2 = sigma0 + maj
-      let t2l = sigma0l + majl;
-      let t2h = sigma0h + majh + ((t2l >>> 0) < (sigma0l >>> 0) ? 1 : 0);
+      t2l = sig0l + majl;
+      t2h = sig0h + majh + ((t2l >>> 0) < (sig0l >>> 0) ? 1 : 0);
 
       // update working variables
       hh = gh;
@@ -294,12 +296,12 @@ export class SHA512 implements Hash {
     this.transform();
 
     // return the hash as byte array
-    let hash = new Uint8Array(64), i;
+    let i, hash = new Uint8Array(64);
     for (i = 0; i < 16; i++) {
       hash[(i << 2) + 0] = (this.H[i] >>> 24) & 0xff;
       hash[(i << 2) + 1] = (this.H[i] >>> 16) & 0xff;
       hash[(i << 2) + 2] = (this.H[i] >>>  8) & 0xff;
-      hash[(i << 2) + 3] = (this.H[i] >>>  0) & 0xff;
+      hash[(i << 2) + 3] = (this.H[i]       ) & 0xff;
     }
 
     // clear internal states and prepare for new hash
