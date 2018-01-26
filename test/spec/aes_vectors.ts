@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -6272,6 +6272,11 @@ export const vector256 = [
 ];
 
 export const vectorCBC_PKCS7 = [
+  { key: "06a9214036b8a15b512e03d534120006",
+    iv:  "3dafba429d9eb430b422da802c9fac41",
+    pt:  "",
+    ct:  "79bbff7c3e845f5abf59a1f30129d9d4"
+  },
   { key: "06a9214036b8a15b512e03d534120006",
     iv:  "3dafba429d9eb430b422da802c9fac41",
     pt:  "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
