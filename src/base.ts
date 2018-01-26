@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015-2016, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -23,7 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-// \brief mipher convert and util functions
+// \brief mipher interface, convert and util functions
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -358,11 +358,11 @@ export namespace Util {
       // abort
       return false;
     }
-    let r = true;
-    for (let i = 0, len = lh.length; i < len; i++) {
-      r = r && (lh[i] === rh[i]);
+    let i, d = 0, len = lh.length;
+    for (i = 0; i < len; i++) {
+      d |= lh[i] ^ rh[i];
     }
-    return r;
+    return d === 0;
   }
 
 
