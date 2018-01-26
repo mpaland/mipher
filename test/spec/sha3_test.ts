@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015-2016, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -77,6 +77,12 @@ describe('SHA3-256', () => {
         }
         expect(Convert.bin2hex(sha.digest(), true)).to.deep.equal(ct);
       }
+    });
+  });
+
+  describe('selftest', () => {
+    it('check selftest', () => {
+      assert.equal(sha.selftest(), true);
     });
   });
 });
