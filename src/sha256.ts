@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015-2016, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -71,7 +71,6 @@ export class SHA256 implements Hash {
     this.H = new Uint32Array([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19]);
     this.bufferIndex = 0;
     this.count = new Uint32Array(2);
-    this.count[0] = this.count[1] = 0;
     Util.clear(this.buffer);
 
     return this;
@@ -81,14 +80,17 @@ export class SHA256 implements Hash {
   /**
    * Perform one transformation cycle
    */
-  private transform() {
+  private transform(): void {
     let h = this.H,
         h0 = h[0], h1 = h[1], h2 = h[2], h3 = h[3], h4 = h[4], h5 = h[5], h6 = h[6], h7 = h[7];
 
-    // convert byte buffer to uint32
-    let w = new Uint32Array(16), i;
-    for (i = 15; i >= 0; i--) {
-      w[i] = (this.buffer[(i << 2) + 3]) | (this.buffer[(i << 2) + 2] << 8) | (this.buffer[(i << 2) + 1] << 16) | (this.buffer[i << 2] << 24);
+    // convert byte buffer into w[0..15]
+    let i, w = new Uint32Array(16);
+    for (i = 0; i < 16; i++) {
+      w[i] = (this.buffer[(i << 2) + 3]      ) |
+             (this.buffer[(i << 2) + 2] << 8 ) |
+             (this.buffer[(i << 2) + 1] << 16) |
+             (this.buffer[(i << 2)    ] << 24);
     }
 
     for (i = 0; i < 64; i++) {
