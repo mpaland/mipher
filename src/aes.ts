@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2007 - 2016, PALANDesign Hannover, Germany
+//             2007-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -54,11 +54,6 @@ export class AES implements Blockcipher {
   U2: Uint32Array;
   U3: Uint32Array;
   U4: Uint32Array;
-  B0: Function;
-  B1: Function;
-  B2: Function;
-  B3: Function;
-  F1: Function;
 
 
   /**
@@ -332,15 +327,31 @@ export class AES implements Blockcipher {
       0x377a0ca1, 0x397101a8, 0x2b6c16b3, 0x25671bba, 0x0f563885, 0x015d358c, 0x13402297, 0x1d4b2f9e, 0x472264e9, 0x492969e0, 0x5b347efb, 0x553f73f2, 0x7f0e50cd, 0x71055dc4, 0x63184adf, 0x6d1347d6,
       0xd7cadc31, 0xd9c1d138, 0xcbdcc623, 0xc5d7cb2a, 0xefe6e815, 0xe1ede51c, 0xf3f0f207, 0xfdfbff0e, 0xa792b479, 0xa999b970, 0xbb84ae6b, 0xb58fa362, 0x9fbe805d, 0x91b58d54, 0x83a89a4f, 0x8da39746
     ]);
+  }
 
-    this.B0 = function (x) { return (x)        & 0xff; };
-    this.B1 = function (x) { return (x >>>  8) & 0xff; };
-    this.B2 = function (x) { return (x >>> 16) & 0xff; };
-    this.B3 = function (x) { return (x >>> 24) & 0xff; };
 
-    this.F1 = function (x0, x1, x2, x3) {
-      return this.B1(this.T1[x0 & 0xff]) | (this.B1(this.T1[(x1 >>> 8) & 0xff]) << 8) | (this.B1(this.T1[(x2 >>> 16) & 0xff]) << 16) | (this.B1(this.T1[x3 >>> 24]) << 24);
-    };
+  private B0(x: number): number {
+    return x & 0xff;
+  }
+
+  private B1(x: number): number {
+    return (x >>> 8) & 0xff;
+  }
+
+  private B2(x: number): number {
+    return (x >>> 16) & 0xff;
+  }
+
+  private B3(x: number): number {
+    return (x >>> 24) & 0xff;
+  }
+
+
+  private F1(x0: number, x1: number, x2: number, x3: number): number {
+    return (this.B1(this.T1[(x0)        & 0xff]))       |
+           (this.B1(this.T1[(x1 >>> 8)  & 0xff]) <<  8) |
+           (this.B1(this.T1[(x2 >>> 16) & 0xff]) << 16) |
+           (this.B1(this.T1[(x3 >>> 24) & 0xff]) << 24);
   }
 
 
@@ -369,7 +380,7 @@ export class AES implements Blockcipher {
    * \param {String} key given as array of bytes
    * \return {Object} .rounds and .keySched
    */
-  private keyExpansion(key: Uint8Array): { rk: number[][]; rounds: number } {
+  private keyExpansion(key: Uint8Array): { rk: Array<Uint32Array>; rounds: number } {
     let rounds = this.keylen[key.length].rounds;
     let kc = this.keylen[key.length].kc;
     let maxkc = 8;
@@ -441,9 +452,9 @@ export class AES implements Blockcipher {
 
   /**
    * @param {Array} key
-   * @return {Object} .rounds and .rk2
+   * @return {Object} rk and rounds
    */
-  private prepare_decryption(key: Uint8Array): { rk: Array<Array<number>>; rounds: number } {
+  private prepare_decryption(key: Uint8Array): { rk: Array<Uint32Array>; rounds: number } {
     let r, w = 0;
     let maxrk = 14;
     let rk2 = [];
@@ -451,7 +462,7 @@ export class AES implements Blockcipher {
     let rounds = ctx.rounds;
 
     for (r = 0; r < maxrk + 1; r++) {
-      rk2[r] = [];
+      rk2[r] = new Uint32Array(4);
       rk2[r][0] = ctx.rk[r][0];
       rk2[r][1] = ctx.rk[r][1];
       rk2[r][2] = ctx.rk[r][2];
@@ -512,9 +523,7 @@ export class AES implements Blockcipher {
     // security clear
     t0 = t1 = t2 = t3 = 0;
     for (let r = 0; r < ctx.rk.length; r++) {
-      for (let i = 0; i < ctx.rk[r].length; i++) {
-        ctx.rk[r][i] = 0;
-      }
+      Util.clear(ctx.rk[r]);
     }
 
     return this.unpackBytes(b);
@@ -563,9 +572,7 @@ export class AES implements Blockcipher {
     // security clear
     t0 = t1 = t2 = t3 = 0;
     for (let r = 0; r < ctx.rk.length; r++) {
-      for (let i = 0; i < ctx.rk[r].length; i++) {
-        ctx.rk[r][i] = 0;
-      }
+      Util.clear(ctx.rk[r]);
     }
 
     return this.unpackBytes(b);
