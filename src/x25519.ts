@@ -39,7 +39,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 import { Convert, Util, Signature } from './base';
-import { SHA512 } from './SHA512';
+import { SHA512 } from './sha512';
 
 
 /**
