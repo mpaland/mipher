@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015-2016, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -36,32 +36,32 @@ import 'mocha';
 
 
 describe('AES', () => {
-  var aes = new AES();
+  let aes = new AES();
 
   describe('encrypt', () => {
     it('check 128 bit testvectors (' + vector128.length + ')', () => {
-      for (var i = 0; i < vector128.length; i++) {
-        var key = Convert.hex2bin(vector128[i].key);
-        var pt  = Convert.hex2bin(vector128[i].pt);
-        var ct  = Convert.hex2bin(vector128[i].ct);
+      for (let i = 0; i < vector128.length; i++) {
+        let key = Convert.hex2bin(vector128[i].key);
+        let pt  = Convert.hex2bin(vector128[i].pt);
+        let ct  = Convert.hex2bin(vector128[i].ct);
         expect(aes.encrypt(key, pt)).to.deep.equal(ct);
       }
     });
 
     it('check 192 bit testvectors (' + vector192.length + ')', () => {
-      for (var i = 0; i < vector192.length; i++) {
-        var key = Convert.hex2bin(vector192[i].key);
-        var pt  = Convert.hex2bin(vector192[i].pt);
-        var ct  = Convert.hex2bin(vector192[i].ct);
+      for (let i = 0; i < vector192.length; i++) {
+        let key = Convert.hex2bin(vector192[i].key);
+        let pt  = Convert.hex2bin(vector192[i].pt);
+        let ct  = Convert.hex2bin(vector192[i].ct);
         expect(aes.encrypt(key, pt)).to.deep.equal(ct);
       }
     });
 
     it('check 256 bit testvectors (' + vector256.length + ')', () => {
-      for (var i = 0; i < vector256.length; i++) {
-        var key = Convert.hex2bin(vector256[i].key);
-        var pt  = Convert.hex2bin(vector256[i].pt);
-        var ct  = Convert.hex2bin(vector256[i].ct);
+      for (let i = 0; i < vector256.length; i++) {
+        let key = Convert.hex2bin(vector256[i].key);
+        let pt  = Convert.hex2bin(vector256[i].pt);
+        let ct  = Convert.hex2bin(vector256[i].ct);
         expect(aes.encrypt(key, pt)).to.deep.equal(ct);
       }
     });
@@ -69,28 +69,28 @@ describe('AES', () => {
 
   describe('decrypt', () => {
     it('check 128 bit testvectors (' + vector256.length + ')', () => {
-      for (var i = 0; i < vector128.length; i++) {
-        var key = Convert.hex2bin(vector128[i].key);
-        var pt  = Convert.hex2bin(vector128[i].pt);
-        var ct  = Convert.hex2bin(vector128[i].ct);
+      for (let i = 0; i < vector128.length; i++) {
+        let key = Convert.hex2bin(vector128[i].key);
+        let pt  = Convert.hex2bin(vector128[i].pt);
+        let ct  = Convert.hex2bin(vector128[i].ct);
         expect(aes.decrypt(key, ct)).to.deep.equal(pt);
       }
     });
 
     it('check 192 bit testvectors (' + vector192.length + ')', () => {
-      for (var i = 0; i < vector192.length; i++) {
-        var key = Convert.hex2bin(vector192[i].key);
-        var pt  = Convert.hex2bin(vector192[i].pt);
-        var ct  = Convert.hex2bin(vector192[i].ct);
+      for (let i = 0; i < vector192.length; i++) {
+        let key = Convert.hex2bin(vector192[i].key);
+        let pt  = Convert.hex2bin(vector192[i].pt);
+        let ct  = Convert.hex2bin(vector192[i].ct);
         expect(aes.decrypt(key, ct)).to.deep.equal(pt);
       }
     });
 
     it('check 256 bit testvectors (' + vector256.length + ')', () => {
-      for (var i = 0; i < vector256.length; i++) {
-        var key = Convert.hex2bin(vector256[i].key);
-        var pt  = Convert.hex2bin(vector256[i].pt);
-        var ct  = Convert.hex2bin(vector256[i].ct);
+      for (let i = 0; i < vector256.length; i++) {
+        let key = Convert.hex2bin(vector256[i].key);
+        let pt  = Convert.hex2bin(vector256[i].pt);
+        let ct  = Convert.hex2bin(vector256[i].ct);
         expect(aes.decrypt(key, ct)).to.deep.equal(pt);
       }
     });
@@ -99,12 +99,14 @@ describe('AES', () => {
   describe('CBC-PKCS7', () => {
     var aes_c = new AES_CBC_PKCS7();
     it('check CBC-PKCS7 testvectors (' + vectorCBC_PKCS7.length + ')', () => {
-      for (var i = 0; i < vectorCBC_PKCS7.length; i++) {
-        var key = Convert.hex2bin(vectorCBC_PKCS7[i].key);
-        var pt  = Convert.hex2bin(vectorCBC_PKCS7[i].pt);
-        var iv  = Convert.hex2bin(vectorCBC_PKCS7[i].iv);
-        var ct  = aes_c.encrypt(key, pt, iv);
-        var pt2 = aes_c.decrypt(key, ct, iv);
+      for (let i = 0; i < vectorCBC_PKCS7.length; i++) {
+        let key = Convert.hex2bin(vectorCBC_PKCS7[i].key);
+        let pt  = Convert.hex2bin(vectorCBC_PKCS7[i].pt);
+        let iv  = Convert.hex2bin(vectorCBC_PKCS7[i].iv);
+        let ct  = Convert.hex2bin(vectorCBC_PKCS7[i].ct);
+        let ct2 = aes_c.encrypt(key, pt, iv);
+        let pt2 = aes_c.decrypt(key, ct, iv);
+        expect(ct2).to.deep.equal(ct);
         expect(pt2).to.deep.equal(pt);
       }
     });
