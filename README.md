@@ -10,10 +10,10 @@
 
 
 ## Highligths and design goals
-There are a lot of crypto libs in JS around, but I needed a clean, lightweight, fast and simple lib for mobile devices in TypeScript. That's **mipher**.  
-A collection of common crypto algorithms, optimized for speed and size.
+There are a lot of crypto libs in JS around, but I needed a clean, lightweight, reliable, fast and simple lib for mobile devices in TypeScript. That's **mipher**.  
+A collection of common crypto algorithms, optimized for speed, security and size.
 
- - Only usage of modern typed arrays `Uint8Array` as message/data types
+ - Only usage of modern typed arrays like `Uint8Array` and `Uint32Array` as message/data types
  - Fast and simple, no dependencies
  - Own crypto random generator (using a FORTUNA implementation)
  - Extensive passing test suite
