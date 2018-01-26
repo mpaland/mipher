@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // \author (c) Marco Paland (marco@paland.com)
-//             2015-2016, PALANDesign Hannover, Germany
+//             2015-2018, PALANDesign Hannover, Germany
 //
 // \license The MIT License (MIT)
 //
@@ -41,6 +41,7 @@ export class Keccak implements Hash {
   buffer: Uint8Array;
   bufferIndex: number;
   s: Uint32Array;
+  RC: Uint32Array;
 
 
   /**
@@ -56,6 +57,14 @@ export class Keccak implements Hash {
 
     this.s      = new Uint32Array(50);              // s is the state: 5 x 5 array of 64-bit words, here 50 x 32 bit
     this.buffer = new Uint8Array(this.byteCount);   // message byte buffer
+
+    this.RC = new Uint32Array([
+      1, 0, 32898, 0, 32906, 2147483648, 2147516416, 2147483648, 32907, 0, 2147483649,
+      0, 2147516545, 2147483648, 32777, 2147483648, 138, 0, 136, 0, 2147516425, 0,
+      2147483658, 0, 2147516555, 0, 139, 2147483648, 32905, 2147483648, 32771,
+      2147483648, 32770, 2147483648, 128, 2147483648, 32778, 0, 2147483658, 2147483648,
+      2147516545, 2147483648, 32896, 2147483648, 2147483649, 0, 2147516424, 2147483648
+    ]);
 
     this.init();
   }
@@ -145,19 +154,13 @@ export class Keccak implements Hash {
 
   /**
    * Absorb function
+   * @private
    */
-  private keccakf() {
-    const RC = new Uint32Array(
-      [1, 0, 32898, 0, 32906, 2147483648, 2147516416, 2147483648, 32907, 0, 2147483649,
-       0, 2147516545, 2147483648, 32777, 2147483648, 138, 0, 136, 0, 2147516425, 0,
-       2147483658, 0, 2147516555, 0, 139, 2147483648, 32905, 2147483648, 32771,
-       2147483648, 32770, 2147483648, 128, 2147483648, 32778, 0, 2147483658, 2147483648,
-       2147516545, 2147483648, 32896, 2147483648, 2147483649, 0, 2147516424, 2147483648]);
-
-    let h, l, s = this.s,
-      b0,  b1,  b2,  b3,  b4,  b5,  b6,  b7,  b8,  b9,  b10, b11, b12, b13, b14, b15, b16,
-      b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33,
-      b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49;
+  private keccakf(): void {
+    let s = this.s, b = new Uint32Array(50);
+    let b0,  b1,  b2,  b3,  b4,  b5,  b6,  b7,  b8,  b9,  b10, b11, b12, b13, b14, b15, b16,
+        b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33,
+        b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49;
 
     // convert byte buffer to words and absorb it
     for (let i = 0; i < this.blockCount; i++) {
@@ -165,17 +168,18 @@ export class Keccak implements Hash {
     }
 
     // transform
+    let c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, h, l;
     for (let n = 0; n < 48; n += 2) {
-      let c0 = s[0] ^ s[10] ^ s[20] ^ s[30] ^ s[40];
-      let c1 = s[1] ^ s[11] ^ s[21] ^ s[31] ^ s[41];
-      let c2 = s[2] ^ s[12] ^ s[22] ^ s[32] ^ s[42];
-      let c3 = s[3] ^ s[13] ^ s[23] ^ s[33] ^ s[43];
-      let c4 = s[4] ^ s[14] ^ s[24] ^ s[34] ^ s[44];
-      let c5 = s[5] ^ s[15] ^ s[25] ^ s[35] ^ s[45];
-      let c6 = s[6] ^ s[16] ^ s[26] ^ s[36] ^ s[46];
-      let c7 = s[7] ^ s[17] ^ s[27] ^ s[37] ^ s[47];
-      let c8 = s[8] ^ s[18] ^ s[28] ^ s[38] ^ s[48];
-      let c9 = s[9] ^ s[19] ^ s[29] ^ s[39] ^ s[49];
+      c0 = s[0] ^ s[10] ^ s[20] ^ s[30] ^ s[40];
+      c1 = s[1] ^ s[11] ^ s[21] ^ s[31] ^ s[41];
+      c2 = s[2] ^ s[12] ^ s[22] ^ s[32] ^ s[42];
+      c3 = s[3] ^ s[13] ^ s[23] ^ s[33] ^ s[43];
+      c4 = s[4] ^ s[14] ^ s[24] ^ s[34] ^ s[44];
+      c5 = s[5] ^ s[15] ^ s[25] ^ s[35] ^ s[45];
+      c6 = s[6] ^ s[16] ^ s[26] ^ s[36] ^ s[46];
+      c7 = s[7] ^ s[17] ^ s[27] ^ s[37] ^ s[47];
+      c8 = s[8] ^ s[18] ^ s[28] ^ s[38] ^ s[48];
+      c9 = s[9] ^ s[19] ^ s[29] ^ s[39] ^ s[49];
 
       h = c8 ^ ((c2 << 1) | (c3 >>> 31));
       l = c9 ^ ((c3 << 1) | (c2 >>> 31));
@@ -339,8 +343,8 @@ export class Keccak implements Hash {
       s[39] = b39 ^ (~b31 & b33);
       s[48] = b48 ^ (~b40 & b42);
       s[49] = b49 ^ (~b41 & b43);
-      s[0] ^= RC[n];
-      s[1] ^= RC[n + 1];
+      s[0] ^= this.RC[n];
+      s[1] ^= this.RC[n + 1];
     }
   }
 
@@ -350,8 +354,17 @@ export class Keccak implements Hash {
    * @return {Boolean} True if successful
    */
   selftest(): boolean {
-// TBD
-    return false;
+    let cumulative = new SHA3_256(), sha = new SHA3_256();
+    let toBeHashed = '', hash, i, n;
+    for (i = 0; i < 10; i++) {
+      for (n = 100 * i; n < 100 * (i + 1); n++) {
+        hash = Convert.bin2hex(sha.hash(Convert.str2bin(toBeHashed)));
+        cumulative.update(Convert.str2bin(hash));
+        toBeHashed = (hash.substring(0, 2) + toBeHashed).substring(0, n + 1);
+      }
+    }
+    hash = Convert.bin2hex(cumulative.digest());
+    return hash === 'fd4998c647300d4b65c0a9d4795f6c2fbc76a0b644b1b0605c4c21f555b67bef';
   }
 }
 
